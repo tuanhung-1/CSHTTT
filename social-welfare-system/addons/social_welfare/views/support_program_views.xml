@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_social_support_program_list" model="ir.ui.view">
+        <field name="name">social.support.program.list</field>
+        <field name="model">social.support.program</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="target_group"/>
+                <field name="support_amount"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_social_support_program_form" model="ir.ui.view">
+        <field name="name">social.support.program.form</field>
+        <field name="model">social.support.program</field>
+        <field name="arch" type="xml">
+            <form string="Support Program">
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="description"/>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                        <field name="target_group"/>
+                        <field name="support_amount"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_social_support_program" model="ir.actions.act_window">
+        <field name="name">Support Programs</field>
+        <field name="res_model">social.support.program</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="menu_social_support_program"
+        name="Support Programs"
+        parent="menu_social_welfare_root"
+        action="action_social_support_program"
+        sequence="30"
+    />
+
+</odoo>

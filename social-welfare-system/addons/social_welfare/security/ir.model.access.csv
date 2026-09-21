@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_household_officer,household.officer,model_social_household,social_welfare.group_social_welfare_officer,1,1,1,0
+access_citizen_officer,citizen.officer,model_social_citizen,social_welfare.group_social_welfare_officer,1,1,1,0
+access_program_officer,program.officer,model_social_support_program,social_welfare.group_social_welfare_officer,1,0,0,0
+access_application_officer,application.officer,model_social_support_application,social_welfare.group_social_welfare_officer,1,1,1,0
+access_application_reviewer,application.reviewer,model_social_support_application,social_welfare.group_social_welfare_reviewer,1,1,1,0
+access_household_manager,household.manager,model_social_household,social_welfare.group_social_welfare_manager,1,1,1,1
+access_citizen_manager,citizen.manager,model_social_citizen,social_welfare.group_social_welfare_manager,1,1,1,1
+access_program_manager,program.manager,model_social_support_program,social_welfare.group_social_welfare_manager,1,1,1,1
+access_application_manager,application.manager,model_social_support_application,social_welfare.group_social_welfare_manager,1,1,1,1

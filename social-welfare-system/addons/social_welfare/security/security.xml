@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Reviewer and Manager inherit the Officer model access rights. -->
+    <record id="group_social_welfare_officer" model="res.groups">
+        <field name="name">Officer</field>
+    </record>
+
+    <!-- Reviewer -->
+    <record id="group_social_welfare_reviewer" model="res.groups">
+        <field name="name">Reviewer</field>
+        <field name="implied_ids"
+               eval="[(4, ref('social_welfare.group_social_welfare_officer'))]"/>
+    </record>
+
+    <!-- Manager -->
+    <record id="group_social_welfare_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="implied_ids"
+               eval="[(4, ref('social_welfare.group_social_welfare_reviewer'))]"/>
+    </record>
+
+</odoo>
