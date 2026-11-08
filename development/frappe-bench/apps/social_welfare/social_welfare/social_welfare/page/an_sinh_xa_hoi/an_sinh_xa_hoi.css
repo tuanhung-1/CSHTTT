@@ -1,0 +1,40 @@
+.ward-app { --ward-navy:#143c48; --ward-teal:#087f74; --ward-line:#dbe7e7; padding:12px 4px 32px; color:var(--text-color); }
+.ward-app button { font:inherit; }
+.ward-hero { display:flex; justify-content:space-between; gap:24px; padding:32px; border-radius:18px; background:linear-gradient(115deg,#123b48,#126a64); color:#fff; }
+.ward-eyebrow { font-size:11px; font-weight:700; letter-spacing:1.8px; color:#bce6dd; }
+.ward-hero h1 { margin:12px 0; font-size:29px; line-height:1.3; color:#fff; }
+.ward-hero p { max-width:620px; color:#e1f1ed; line-height:1.7; margin-bottom:18px; }
+.ward-role-list { display:flex; flex-wrap:wrap; gap:8px; }
+.ward-role-list span { border:1px solid #ffffff45; border-radius:24px; padding:5px 12px; font-size:12px; }
+.ward-hero-mark { min-width:138px; align-self:center; text-align:center; font-size:48px; font-weight:800; line-height:.9; color:#b6ded4; border-left:1px solid #ffffff35; padding-left:24px; }
+.ward-hero-mark small { display:block; font-size:9px; letter-spacing:1.5px; margin-top:15px; }
+.ward-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(155px,1fr)); gap:14px; margin:22px 0 30px; }
+.ward-card { position:relative; text-align:left; border:1px solid var(--ward-line); background:var(--card-bg); border-radius:13px; padding:20px; cursor:pointer; transition:transform .15s,box-shadow .15s; }
+.ward-card:hover { transform:translateY(-3px); box-shadow:0 6px 20px #16443e15; border-color:var(--ward-teal); }
+.ward-card:focus-visible,.ward-task-row:focus-visible { outline:3px solid #13998b; outline-offset:3px; }
+.ward-card-index { float:right; color:#809b99; font-size:12px; }
+.ward-card strong { display:block; color:var(--ward-teal); font-size:30px; line-height:1.2; margin:4px 0 12px; }
+.ward-card-label { display:block; font-weight:650; }
+.ward-card-link { display:block; color:var(--text-muted); font-size:11px; margin-top:12px; }
+.ward-body { display:grid; grid-template-columns:minmax(0,1fr) 280px; gap:24px; }
+.ward-section-title,.ward-task-heading { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+.ward-section-title { margin-bottom:16px; }
+.ward-section-title h2,.ward-side h2 { font-size:18px; margin:0; }
+.ward-section-title>span { font-size:12px; color:var(--text-muted); }
+.ward-task { border:1px solid var(--ward-line); background:var(--card-bg); border-radius:12px; margin-bottom:16px; overflow:hidden; }
+.ward-task-heading { padding:15px 18px; border-bottom:1px solid var(--ward-line); }
+.ward-task h3 { font-size:14px; margin:0; font-weight:650; }
+.ward-task-row { width:100%; display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px 18px; text-align:left; border:0; border-bottom:1px solid var(--ward-line); background:transparent; color:var(--text-color); cursor:pointer; }
+.ward-task-row:last-child { border-bottom:0; }
+.ward-task-row:hover { background:var(--subtle-fg); }
+.ward-task-row small { display:block; color:var(--text-muted); margin-top:4px; }
+.ward-state { background:#e5f3ef; color:#176858; border-radius:20px; padding:5px 10px; font-size:11px; white-space:nowrap; }
+.ward-empty { padding:22px 18px; color:var(--text-muted); margin:0; }
+.ward-side { background:var(--card-bg); border:1px solid var(--ward-line); border-radius:13px; padding:20px; align-self:start; }
+.ward-side h2 { margin-bottom:18px; }
+.ward-guidance { border-top:1px solid var(--ward-line); margin-top:22px; padding-top:18px; }
+.ward-guidance h3 { font-size:13px; color:var(--ward-teal); font-weight:700; }
+.ward-guidance p,.ward-side>p { font-size:12px; line-height:1.8; color:var(--text-muted); }
+.ward-guidance small { font-size:11px; color:var(--text-muted); }
+@media(max-width:900px) { .ward-body { grid-template-columns:1fr; } .ward-hero-mark { display:none; } }
+@media(max-width:500px) { .ward-hero { padding:22px; } .ward-hero h1 { font-size:23px; } .ward-cards { grid-template-columns:1fr 1fr; } .ward-task-row { align-items:flex-start; flex-direction:column; } .ward-section-title>span { display:none; } }

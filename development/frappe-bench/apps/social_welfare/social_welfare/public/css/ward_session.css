@@ -1,0 +1,10 @@
+.page-actions > .ward-session-logout {
+    flex-shrink: 0;
+    margin-right: 10px;
+    white-space: nowrap;
+}
+
+.ward-session-logout:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}

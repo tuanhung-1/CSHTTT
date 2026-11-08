@@ -1,6 +1,6 @@
 {
  "actions": [],
- "allow_rename": 1,
+ "allow_rename": 0,
  "autoname": "field:application_code",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -13,7 +13,14 @@
   "approved_amount",
   "reason",
   "review_note",
-  "workflow_state"
+  "workflow_state",
+  "verification_note",
+  "payment_note",
+  "submitted_by",
+  "decided_by",
+  "decided_at",
+  "paid_by",
+  "paid_at"
  ],
  "fields": [
   {
@@ -21,19 +28,19 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Application Code",
-   "read_only_depends_on": "eval:!doc.__islocal || doc.workflow_state != 'Draft'",
+   "label": "Mã hồ sơ",
+   "read_only_depends_on": "eval:!['Draft','Returned'].includes(doc.workflow_state)",
    "unique": 1,
-   "description": "Leave blank to generate automatically."
+   "description": "Để trống để hệ thống tự tạo mã."
   },
   {
    "fieldname": "household",
    "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Household",
+   "label": "Hộ gia đình",
    "options": "Household",
-   "read_only_depends_on": "eval:doc.workflow_state != 'Draft'",
+   "read_only_depends_on": "eval:!['Draft','Returned'].includes(doc.workflow_state)",
    "reqd": 1
   },
   {
@@ -41,9 +48,9 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Support Program",
+   "label": "Chương trình hỗ trợ",
    "options": "Support Program",
-   "read_only_depends_on": "eval:doc.workflow_state != 'Draft'",
+   "read_only_depends_on": "eval:!['Draft','Returned'].includes(doc.workflow_state)",
    "reqd": 1
   },
   {
@@ -51,38 +58,38 @@
    "fieldname": "application_date",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "Application Date",
-   "read_only_depends_on": "eval:doc.workflow_state != 'Draft'"
+   "label": "Ngày hồ sơ",
+   "read_only_depends_on": "eval:!['Draft','Returned'].includes(doc.workflow_state)"
   },
   {
    "default": "0",
    "fieldname": "requested_amount",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Requested Amount",
+   "label": "Số tiền đề nghị",
    "non_negative": 1,
-   "read_only_depends_on": "eval:doc.workflow_state != 'Draft'"
+   "read_only_depends_on": "eval:!['Draft','Returned'].includes(doc.workflow_state)"
   },
   {
    "default": "0",
    "fieldname": "approved_amount",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Approved Amount",
+   "label": "Số tiền phê duyệt",
    "non_negative": 1,
-   "read_only_depends_on": "eval:doc.workflow_state != 'Reviewing'"
+   "read_only_depends_on": "eval:doc.workflow_state != 'Pending Approval'"
   },
   {
    "fieldname": "reason",
    "fieldtype": "Text",
-   "label": "Reason for Support",
-   "read_only_depends_on": "eval:doc.workflow_state != 'Draft'"
+   "label": "Lý do đề nghị",
+   "read_only_depends_on": "eval:!['Draft','Returned'].includes(doc.workflow_state)"
   },
   {
    "fieldname": "review_note",
    "fieldtype": "Text",
-   "label": "Review Note",
-   "read_only_depends_on": "eval:doc.workflow_state != 'Reviewing'"
+   "label": "Ý kiến của lãnh đạo",
+   "read_only_depends_on": "eval:doc.workflow_state != 'Pending Approval'"
   },
   {
    "default": "Draft",
@@ -90,11 +97,56 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Status",
+   "label": "Trạng thái",
    "no_copy": 1,
-   "options": "Draft\nSubmitted\nReviewing\nApproved\nRejected\nPaid",
+   "options": "Draft\nSubmitted\nReviewing\nPending Approval\nReturned\nApproved\nRejected\nPaid",
    "read_only": 1,
    "reqd": 1
+  },
+  {
+   "fieldname": "verification_note",
+   "label": "Kết quả xác minh",
+   "fieldtype": "Small Text",
+   "read_only_depends_on": "eval:!['Submitted','Reviewing'].includes(doc.workflow_state)"
+  },
+  {
+   "fieldname": "payment_note",
+   "label": "Ghi chú xác nhận chi trả",
+   "fieldtype": "Small Text",
+   "read_only_depends_on": "eval:doc.workflow_state != 'Approved'"
+  },
+  {
+   "fieldname": "submitted_by",
+   "label": "Người trình",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "decided_by",
+   "label": "Người quyết định",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "paid_by",
+   "label": "Người xác nhận chi",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "decided_at",
+   "label": "Thời điểm quyết định",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "paid_at",
+   "label": "Thời điểm xác nhận chi",
+   "fieldtype": "Datetime",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -104,29 +156,34 @@
  "naming_rule": "By fieldname",
  "permissions": [
   {
-   "create": 1,
-   "read": 1,
    "role": "Social Welfare Officer",
-   "write": 1
-  },
-  {
-   "create": 1,
    "read": 1,
-   "role": "Social Welfare Reviewer",
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "read": 1,
-   "role": "Social Welfare Manager",
+   "report": 1,
    "write": 1,
-   "import": 1
+   "create": 1
+  },
+  {
+   "role": "Social Welfare Reviewer",
+   "read": 1,
+   "report": 1,
+   "write": 1
+  },
+  {
+   "role": "Social Welfare Manager",
+   "read": 1,
+   "report": 1,
+   "write": 1
+  },
+  {
+   "role": "Social Welfare Finance",
+   "read": 1,
+   "report": 1,
+   "write": 1
   }
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1,
- "allow_import": 1
+ "allow_import": 0
 }

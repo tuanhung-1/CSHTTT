@@ -4,7 +4,7 @@
 from uuid import uuid4
 
 import frappe
-from frappe.tests.utils import FrappeTestCase
+from frappe.tests import IntegrationTestCase as FrappeTestCase
 from frappe.utils import add_days, nowdate
 
 
@@ -65,9 +65,9 @@ class TestCitizen(FrappeTestCase):
 			self.make_citizen(household.name, date_of_birth=add_days(nowdate(), 1))
 
 	def test_codes_are_generated_when_blank(self):
-		household = frappe.get_doc(
-			{"doctype": "Household", "head_name": "Generated Code Head"}
-		).insert(ignore_permissions=True)
+		household = frappe.get_doc({"doctype": "Household", "head_name": "Generated Code Head"}).insert(
+			ignore_permissions=True
+		)
 		self.assertRegex(household.household_code, r"^HH-\d{4}-\d{5}$")
 
 		citizen = frappe.get_doc(

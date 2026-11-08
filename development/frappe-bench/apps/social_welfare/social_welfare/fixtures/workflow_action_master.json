@@ -28,5 +28,15 @@
   "doctype": "Workflow Action Master",
   "name": "Reset to Draft",
   "workflow_action_name": "Reset to Draft"
+ },
+ {
+  "doctype": "Workflow Action Master",
+  "name": "Complete Verification",
+  "workflow_action_name": "Complete Verification"
+ },
+ {
+  "doctype": "Workflow Action Master",
+  "name": "Return for Supplement",
+  "workflow_action_name": "Return for Supplement"
  }
 ]

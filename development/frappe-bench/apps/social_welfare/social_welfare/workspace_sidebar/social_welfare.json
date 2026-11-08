@@ -1,0 +1,16 @@
+{
+ "doctype": "Workspace Sidebar",
+ "name": "Social Welfare",
+ "title": "Social Welfare",
+ "app": "social_welfare",
+ "standard": 1,
+ "header_icon": "heart-handshake",
+ "items": [
+  {"type": "Link", "label": "Tổng quan và công việc", "link_type": "Page", "link_to": "an-sinh-xa-hoi", "icon": "home"},
+  {"type": "Link", "label": "Hộ gia đình", "link_type": "DocType", "link_to": "Household", "icon": "house"},
+  {"type": "Link", "label": "Công dân", "link_type": "DocType", "link_to": "Citizen", "icon": "users"},
+  {"type": "Link", "label": "Lịch sử phân loại", "link_type": "DocType", "link_to": "Household Classification", "icon": "history"},
+  {"type": "Link", "label": "Chương trình hỗ trợ", "link_type": "DocType", "link_to": "Support Program", "icon": "gift"},
+  {"type": "Link", "label": "Hồ sơ hỗ trợ", "link_type": "DocType", "link_to": "Support Application", "icon": "files"}
+ ]
+}

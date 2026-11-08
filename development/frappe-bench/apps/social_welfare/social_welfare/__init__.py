@@ -11,5 +11,6 @@ def has_app_permission():
 		"Social Welfare Officer",
 		"Social Welfare Reviewer",
 		"Social Welfare Manager",
+		"Social Welfare Finance",
 	}
 	return bool(allowed_roles.intersection(frappe.get_roles()))

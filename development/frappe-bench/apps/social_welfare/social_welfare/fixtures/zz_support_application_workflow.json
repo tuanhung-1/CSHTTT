@@ -8,144 +8,137 @@
   "send_email_alert": 0,
   "states": [
    {
+    "doctype": "Workflow Document State",
+    "state": "Draft",
     "allow_edit": "Social Welfare Officer",
     "doc_status": "0",
-    "doctype": "Workflow Document State",
-    "send_email": 0,
-    "state": "Draft"
+    "send_email": 0
    },
    {
+    "doctype": "Workflow Document State",
+    "state": "Submitted",
     "allow_edit": "Social Welfare Reviewer",
     "doc_status": "0",
-    "doctype": "Workflow Document State",
-    "send_email": 0,
-    "state": "Submitted"
+    "send_email": 0
    },
    {
+    "doctype": "Workflow Document State",
+    "state": "Reviewing",
     "allow_edit": "Social Welfare Reviewer",
     "doc_status": "0",
-    "doctype": "Workflow Document State",
-    "send_email": 0,
-    "state": "Reviewing"
+    "send_email": 0
    },
    {
-    "allow_edit": "Social Welfare Reviewer",
-    "doc_status": "0",
     "doctype": "Workflow Document State",
-    "send_email": 0,
-    "state": "Approved"
+    "state": "Pending Approval",
+    "allow_edit": "Social Welfare Manager",
+    "doc_status": "0",
+    "send_email": 0
    },
    {
-    "allow_edit": "Social Welfare Reviewer",
-    "doc_status": "0",
     "doctype": "Workflow Document State",
-    "send_email": 0,
-    "state": "Rejected"
+    "state": "Returned",
+    "allow_edit": "Social Welfare Officer",
+    "doc_status": "0",
+    "send_email": 0
    },
    {
-    "allow_edit": "Social Welfare Reviewer",
-    "doc_status": "0",
     "doctype": "Workflow Document State",
-    "send_email": 0,
-    "state": "Paid"
+    "state": "Approved",
+    "allow_edit": "Social Welfare Finance",
+    "doc_status": "0",
+    "send_email": 0
+   },
+   {
+    "doctype": "Workflow Document State",
+    "state": "Rejected",
+    "allow_edit": "Social Welfare Officer",
+    "doc_status": "0",
+    "send_email": 0
+   },
+   {
+    "doctype": "Workflow Document State",
+    "state": "Paid",
+    "allow_edit": "Social Welfare Finance",
+    "doc_status": "0",
+    "send_email": 0
    }
   ],
   "transitions": [
    {
+    "doctype": "Workflow Transition",
+    "state": "Draft",
     "action": "Submit",
-    "allow_self_approval": 1,
+    "next_state": "Submitted",
     "allowed": "Social Welfare Officer",
-    "doctype": "Workflow Transition",
-    "next_state": "Submitted",
-    "state": "Draft"
+    "allow_self_approval": 1
    },
    {
+    "doctype": "Workflow Transition",
+    "state": "Submitted",
     "action": "Start Review",
-    "allow_self_approval": 1,
-    "allowed": "Social Welfare Reviewer",
-    "doctype": "Workflow Transition",
     "next_state": "Reviewing",
-    "state": "Submitted"
+    "allowed": "Social Welfare Reviewer",
+    "allow_self_approval": 1
    },
    {
+    "doctype": "Workflow Transition",
+    "state": "Reviewing",
+    "action": "Complete Verification",
+    "next_state": "Pending Approval",
+    "allowed": "Social Welfare Reviewer",
+    "allow_self_approval": 1
+   },
+   {
+    "doctype": "Workflow Transition",
+    "state": "Pending Approval",
     "action": "Approve",
-    "allow_self_approval": 1,
-    "allowed": "Social Welfare Reviewer",
-    "doctype": "Workflow Transition",
     "next_state": "Approved",
-    "state": "Reviewing"
+    "allowed": "Social Welfare Manager",
+    "allow_self_approval": 0,
+    "condition": "doc.submitted_by != frappe.session.user"
    },
    {
+    "doctype": "Workflow Transition",
+    "state": "Pending Approval",
     "action": "Reject",
-    "allow_self_approval": 1,
-    "allowed": "Social Welfare Reviewer",
-    "doctype": "Workflow Transition",
     "next_state": "Rejected",
-    "state": "Reviewing"
-   },
-   {
-    "action": "Mark as Paid",
+    "allowed": "Social Welfare Manager",
     "allow_self_approval": 1,
-    "allowed": "Social Welfare Reviewer",
-    "doctype": "Workflow Transition",
-    "next_state": "Paid",
-    "state": "Approved"
+    "condition": "doc.submitted_by != frappe.session.user"
    },
    {
+    "doctype": "Workflow Transition",
+    "state": "Pending Approval",
+    "action": "Return for Supplement",
+    "next_state": "Returned",
+    "allowed": "Social Welfare Manager",
+    "allow_self_approval": 1,
+    "condition": "doc.submitted_by != frappe.session.user"
+   },
+   {
+    "doctype": "Workflow Transition",
+    "state": "Returned",
     "action": "Reset to Draft",
-    "allow_self_approval": 1,
-    "allowed": "Social Welfare Reviewer",
-    "doctype": "Workflow Transition",
     "next_state": "Draft",
-    "state": "Rejected"
+    "allowed": "Social Welfare Officer",
+    "allow_self_approval": 1
    },
    {
-    "action": "Submit",
-    "allow_self_approval": 1,
-    "allowed": "Social Welfare Manager",
     "doctype": "Workflow Transition",
-    "next_state": "Submitted",
-    "state": "Draft"
-   },
-   {
-    "action": "Start Review",
-    "allow_self_approval": 1,
-    "allowed": "Social Welfare Manager",
-    "doctype": "Workflow Transition",
-    "next_state": "Reviewing",
-    "state": "Submitted"
-   },
-   {
-    "action": "Approve",
-    "allow_self_approval": 1,
-    "allowed": "Social Welfare Manager",
-    "doctype": "Workflow Transition",
-    "next_state": "Approved",
-    "state": "Reviewing"
-   },
-   {
-    "action": "Reject",
-    "allow_self_approval": 1,
-    "allowed": "Social Welfare Manager",
-    "doctype": "Workflow Transition",
-    "next_state": "Rejected",
-    "state": "Reviewing"
-   },
-   {
-    "action": "Mark as Paid",
-    "allow_self_approval": 1,
-    "allowed": "Social Welfare Manager",
-    "doctype": "Workflow Transition",
-    "next_state": "Paid",
-    "state": "Approved"
-   },
-   {
+    "state": "Rejected",
     "action": "Reset to Draft",
-    "allow_self_approval": 1,
-    "allowed": "Social Welfare Manager",
-    "doctype": "Workflow Transition",
     "next_state": "Draft",
-    "state": "Rejected"
+    "allowed": "Social Welfare Officer",
+    "allow_self_approval": 1
+   },
+   {
+    "doctype": "Workflow Transition",
+    "state": "Approved",
+    "action": "Mark as Paid",
+    "next_state": "Paid",
+    "allowed": "Social Welfare Finance",
+    "allow_self_approval": 1
    }
   ],
   "workflow_name": "Support Application Workflow",

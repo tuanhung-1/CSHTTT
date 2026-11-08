@@ -1,7 +1,7 @@
 {
  "app": "social_welfare",
  "charts": [],
- "content": "[{\"id\":\"social-welfare-header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Social Welfare</b></span>\",\"col\":12}},{\"id\":\"household-shortcut\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Household\",\"col\":3}},{\"id\":\"citizen-shortcut\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Citizen\",\"col\":3}},{\"id\":\"support-program-shortcut\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Support Program\",\"col\":3}},{\"id\":\"support-application-shortcut\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Support Application\",\"col\":3}}]",
+ "content": "[{\"id\":\"social-welfare-header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>An sinh xã hội phường</b></span>\",\"col\":12}},{\"id\":\"ward-home\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Trung tâm an sinh\",\"col\":12}},{\"id\":\"household-shortcut\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Household\",\"col\":3}},{\"id\":\"citizen-shortcut\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Citizen\",\"col\":3}},{\"id\":\"support-program-shortcut\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Support Program\",\"col\":3}},{\"id\":\"support-application-shortcut\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Support Application\",\"col\":3}},{\"id\":\"classification-shortcut\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lịch sử phân loại\",\"col\":4}}]",
  "custom_blocks": [],
  "docstatus": 0,
  "doctype": "Workspace",
@@ -19,9 +19,28 @@
  "public": 1,
  "quick_lists": [],
  "restrict_to_domain": "",
- "roles": [],
- "sequence_id": 10.0,
+ "roles": [
+  {
+   "role": "Social Welfare Officer"
+  },
+  {
+   "role": "Social Welfare Reviewer"
+  },
+  {
+   "role": "Social Welfare Manager"
+  },
+  {
+   "role": "Social Welfare Finance"
+  }
+ ],
+ "sequence_id": 10,
  "shortcuts": [
+  {
+   "label": "Trung tâm an sinh",
+   "type": "Page",
+   "link_to": "an-sinh-xa-hoi",
+   "color": "Blue"
+  },
   {
    "color": "Blue",
    "doc_view": "List",
@@ -49,8 +68,15 @@
    "label": "Support Application",
    "link_to": "Support Application",
    "type": "DocType"
+  },
+  {
+   "label": "Lịch sử phân loại",
+   "type": "DocType",
+   "link_to": "Household Classification",
+   "doc_view": "List",
+   "color": "Green"
   }
  ],
- "title": "Social Welfare",
+ "title": "An sinh xã hội",
  "type": "Workspace"
 }

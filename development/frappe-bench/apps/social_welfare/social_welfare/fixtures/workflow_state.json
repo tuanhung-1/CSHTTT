@@ -31,5 +31,17 @@
   "name": "Paid",
   "style": "Success",
   "workflow_state_name": "Paid"
+ },
+ {
+  "doctype": "Workflow State",
+  "name": "Pending Approval",
+  "workflow_state_name": "Pending Approval",
+  "style": "Primary"
+ },
+ {
+  "doctype": "Workflow State",
+  "name": "Returned",
+  "workflow_state_name": "Returned",
+  "style": "Warning"
  }
 ]

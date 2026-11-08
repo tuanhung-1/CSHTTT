@@ -1,17 +1,26 @@
 {
  "actions": [],
- "allow_rename": 1,
+ "allow_rename": 0,
  "autoname": "field:household_code",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "identity_section",
   "household_code",
-  "head_citizen",
   "head_name",
+  "head_citizen",
+  "identity_column",
+  "residential_group",
   "address",
+  "is_archived",
+  "verification_section",
   "member_count",
   "average_income",
-  "poverty_status"
+  "verification_column",
+  "assigned_verifier",
+  "poverty_status",
+  "classification_section",
+  "classification_history"
  ],
  "fields": [
   {
@@ -19,38 +28,38 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Household Code",
+   "label": "Mã hộ gia đình",
    "unique": 1,
-   "description": "Leave blank to generate automatically.",
+   "description": "Để trống để hệ thống tự tạo mã.",
    "read_only_depends_on": "eval:!doc.__islocal"
   },
   {
    "fieldname": "head_citizen",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Head Citizen",
+   "label": "Công dân làm chủ hộ",
    "options": "Citizen"
   },
   {
-   "description": "Legacy household-head name retained during normalization.",
+   "description": "Tên chủ hộ hiển thị trên hồ sơ; có thể liên kết công dân làm chủ hộ bên dưới.",
    "fieldname": "head_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Head Name (Legacy)",
+   "label": "Họ tên chủ hộ",
    "reqd": 1
   },
   {
    "fieldname": "address",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Address"
+   "label": "Địa chỉ"
   },
   {
    "default": "0",
    "fieldname": "member_count",
    "fieldtype": "Int",
    "in_list_view": 1,
-   "label": "Number of Members",
+   "label": "Số thành viên",
    "read_only": 1
   },
   {
@@ -58,48 +67,119 @@
    "fieldname": "average_income",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Average Income",
+   "label": "Thu nhập bình quân",
    "non_negative": 1
   },
   {
-   "default": "Normal",
    "fieldname": "poverty_status",
    "fieldtype": "Select",
+   "in_list_view": 0,
+   "label": "Phân loại cũ (chưa rõ kỳ hiệu lực)",
+   "options": "\nPoor Household\nNear-poor Household\nNormal",
+   "read_only": 1,
+   "hidden": 1,
+   "default": ""
+  },
+  {
+   "fieldname": "residential_group",
+   "label": "Tổ dân phố",
+   "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Household Classification",
-   "options": "Poor Household\nNear-poor Household\nNormal"
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "assigned_verifier",
+   "label": "Người được giao xác minh",
+   "fieldtype": "Link",
+   "options": "User",
+   "description": "Chỉ người có vai trò Người xác minh. Người này chỉ được xem các hộ được giao."
+  },
+  {
+   "fieldname": "is_archived",
+   "label": "Đã lưu trữ",
+   "fieldtype": "Check",
+   "default": "0",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "classification_section",
+   "label": "Lịch sử phân loại",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "classification_history",
+   "label": "Lịch sử",
+   "fieldtype": "HTML"
+  },
+  {
+   "fieldname": "identity_section",
+   "label": "Thông tin hộ gia đình",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "identity_column",
+   "label": "",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "verification_section",
+   "label": "Thành viên và phân công",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "verification_column",
+   "label": "",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
- "links": [],
+ "links": [
+  {
+   "link_doctype": "Citizen",
+   "link_fieldname": "household",
+   "group": "Thành viên"
+  },
+  {
+   "link_doctype": "Household Classification",
+   "link_fieldname": "household",
+   "group": "Lịch sử"
+  },
+  {
+   "link_doctype": "Support Application",
+   "link_fieldname": "household",
+   "group": "Hỗ trợ"
+  }
+ ],
  "module": "Social Welfare",
  "name": "Household",
  "naming_rule": "By fieldname",
  "permissions": [
   {
-   "create": 1,
-   "read": 1,
    "role": "Social Welfare Officer",
-   "write": 1
-  },
-  {
-   "create": 1,
    "read": 1,
-   "role": "Social Welfare Reviewer",
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "read": 1,
-   "role": "Social Welfare Manager",
+   "report": 1,
    "write": 1,
-   "import": 1
+   "create": 1
+  },
+  {
+   "role": "Social Welfare Reviewer",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Social Welfare Manager",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Social Welfare Finance",
+   "read": 1,
+   "report": 1
   }
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1,
- "allow_import": 1
+ "allow_import": 0
 }

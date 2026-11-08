@@ -1,4 +1,4 @@
-> **Dự án Social Welfare (Frappe/ERPNext):** đọc [PROJECT_HANDOFF.md](PROJECT_HANDOFF.md) trước khi chạy hoặc phát triển. Nhánh bàn giao của nhóm là `thang`; phần bên dưới là tài liệu gốc của Frappe Docker.
+> **Dự án Social Welfare (Frappe/ERPNext):** xem [hướng dẫn code-first ngắn](CODE_FIRST.md) và [tài liệu bàn giao](PROJECT_HANDOFF.md) trước khi chạy hoặc phát triển. Nhánh bàn giao của nhóm là `thang`; phần bên dưới là tài liệu gốc của Frappe Docker.
 
 <div align="center">
   <img src="docs/public/frappe-docker.png" alt="Frappe Docker" width="80" />
