@@ -1,6 +1,6 @@
 {
  "actions": [],
- "allow_rename": 1,
+ "allow_rename": 0,
  "autoname": "field:code",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -12,7 +12,8 @@
   "end_date",
   "support_amount",
   "target_group",
-  "active"
+  "active",
+  "is_archived"
  ],
  "fields": [
   {
@@ -20,7 +21,7 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Program Code",
+   "label": "Mã chương trình",
    "reqd": 1,
    "unique": 1
   },
@@ -29,26 +30,26 @@
    "fieldtype": "Data",
    "in_global_search": 1,
    "in_list_view": 1,
-   "label": "Program Name",
+   "label": "Tên chương trình",
    "reqd": 1
   },
   {
    "fieldname": "description",
    "fieldtype": "Text",
-   "label": "Description"
+   "label": "Mô tả"
   },
   {
    "fieldname": "start_date",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "Start Date",
+   "label": "Ngày bắt đầu",
    "reqd": 1
   },
   {
    "fieldname": "end_date",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "End Date",
+   "label": "Ngày kết thúc",
    "reqd": 1
   },
   {
@@ -56,14 +57,14 @@
    "fieldname": "support_amount",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Standard Support Amount",
+   "label": "Mức hỗ trợ",
    "non_negative": 1
   },
   {
    "fieldname": "target_group",
    "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Target Group",
+   "label": "Nhóm đối tượng",
    "options": "\npoor\nnear_poor\ndisaster\npolicy\nother"
   },
   {
@@ -71,7 +72,14 @@
    "fieldname": "active",
    "fieldtype": "Check",
    "in_list_view": 1,
-   "label": "Active"
+   "label": "Đang triển khai"
+  },
+  {
+   "fieldname": "is_archived",
+   "label": "Đã lưu trữ",
+   "fieldtype": "Check",
+   "default": "0",
+   "in_standard_filter": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -81,20 +89,26 @@
  "naming_rule": "By fieldname",
  "permissions": [
   {
+   "role": "Social Welfare Officer",
    "read": 1,
-   "role": "Social Welfare Officer"
-  },
-  {
-   "read": 1,
-   "role": "Social Welfare Reviewer"
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "read": 1,
-   "role": "Social Welfare Manager",
+   "report": 1,
    "write": 1,
-   "import": 1
+   "create": 1
+  },
+  {
+   "role": "Social Welfare Reviewer",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Social Welfare Manager",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Social Welfare Finance",
+   "read": 1,
+   "report": 1
   }
  ],
  "show_name_in_global_search": 1,
@@ -103,5 +117,5 @@
  "states": [],
  "title_field": "program_name",
  "track_changes": 1,
- "allow_import": 1
+ "allow_import": 0
 }

@@ -10,7 +10,7 @@ add_to_apps_screen = [
 		"name": app_name,
 		"logo": "/assets/social_welfare/images/social-welfare.svg",
 		"title": app_title,
-		"route": "/desk/social-welfare",
+		"route": "/desk/an-sinh-xa-hoi",
 		"has_permission": "social_welfare.has_app_permission",
 	}
 ]
@@ -35,8 +35,8 @@ add_to_apps_screen = [
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/social_welfare/css/social_welfare.css"
-# app_include_js = "/assets/social_welfare/js/social_welfare.js"
+app_include_css = "/assets/social_welfare/css/ward_session.css"
+app_include_js = "/assets/social_welfare/js/ward_session.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/social_welfare/css/social_welfare.css"
@@ -283,21 +283,72 @@ fixtures = [
 					"Social Welfare Officer",
 					"Social Welfare Reviewer",
 					"Social Welfare Manager",
+					"Social Welfare Finance",
 				],
 			]
 		],
 	},
 	{
 		"dt": "Workflow State",
-		"filters": [["workflow_state_name", "in", ["Draft", "Submitted", "Reviewing", "Approved", "Rejected", "Paid"]]],
+		"filters": [
+			[
+				"workflow_state_name",
+				"in",
+				[
+					"Draft",
+					"Submitted",
+					"Reviewing",
+					"Pending Approval",
+					"Returned",
+					"Approved",
+					"Rejected",
+					"Paid",
+				],
+			]
+		],
 	},
 	{
 		"dt": "Workflow Action Master",
-		"filters": [["workflow_action_name", "in", ["Submit", "Start Review", "Approve", "Reject", "Mark as Paid", "Reset to Draft"]]],
+		"filters": [
+			[
+				"workflow_action_name",
+				"in",
+				[
+					"Submit",
+					"Start Review",
+					"Complete Verification",
+					"Approve",
+					"Reject",
+					"Return for Supplement",
+					"Mark as Paid",
+					"Reset to Draft",
+				],
+			]
+		],
 	},
 	{
 		"dt": "Workflow",
 		"filters": [["workflow_name", "=", "Support Application Workflow"]],
 		"prefix": "zz_support_application",
-	}
+	},
 ]
+
+after_migrate = "social_welfare.migrations.after_migrate"
+before_migrate = "social_welfare.migrations.before_migrate"
+before_install = "social_welfare.migrations.before_migrate"
+after_install = "social_welfare.migrations.after_install"
+boot_session = "social_welfare.permissions.boot_session"
+permission_query_conditions = {
+	"Household": "social_welfare.permissions.household_query",
+	"Citizen": "social_welfare.permissions.citizen_query",
+	"Household Classification": "social_welfare.permissions.classification_query",
+	"Support Application": "social_welfare.permissions.application_query",
+}
+has_permission = {
+	name: "social_welfare.permissions.document_permission"
+	for name in ("Household", "Citizen", "Household Classification", "Support Program", "Support Application")
+}
+doc_events = {
+	name: {"on_trash": "social_welfare.permissions.prevent_delete"}
+	for name in ("Household", "Citizen", "Support Program", "Support Application")
+}

@@ -1,0 +1,135 @@
+{
+ "doctype": "DocType",
+ "name": "Household Classification",
+ "module": "Social Welfare",
+ "engine": "InnoDB",
+ "autoname": "format:HC-{#####}",
+ "naming_rule": "Expression",
+ "track_changes": 1,
+ "sort_field": "valid_from",
+ "sort_order": "DESC",
+ "permissions": [
+  {
+   "role": "Social Welfare Officer",
+   "read": 1,
+   "report": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "Social Welfare Reviewer",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Social Welfare Manager",
+   "read": 1,
+   "report": 1
+  }
+ ],
+ "fields": [
+  {
+   "fieldname": "household",
+   "label": "Hộ gia đình",
+   "fieldtype": "Link",
+   "options": "Household",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "classification",
+   "label": "Phân loại",
+   "fieldtype": "Select",
+   "options": "\nPoor Household\nNear-poor Household\nNormal",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "period",
+   "label": "Kỳ phân loại",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "valid_from",
+   "label": "Hiệu lực từ",
+   "fieldtype": "Date",
+   "mandatory_depends_on": "eval:!doc.is_legacy",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "valid_to",
+   "label": "Hiệu lực đến",
+   "fieldtype": "Date",
+   "mandatory_depends_on": "eval:!doc.is_legacy",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "basis",
+   "label": "Căn cứ phân loại",
+   "fieldtype": "Small Text",
+   "reqd": 1
+  },
+  {
+   "fieldname": "evidence",
+   "label": "Tệp minh chứng",
+   "fieldtype": "Attach"
+  },
+  {
+   "fieldname": "notes",
+   "label": "Ghi chú",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "is_legacy",
+   "label": "Dữ liệu cũ cần rà soát",
+   "fieldtype": "Check",
+   "default": "0",
+   "read_only": 1,
+   "in_list_view": 1,
+   "description": "Chưa rõ ngày hiệu lực; không dùng làm căn cứ phân loại hiện tại."
+  },
+  {
+   "fieldname": "is_void",
+   "label": "Đã hủy hiệu lực",
+   "fieldtype": "Check",
+   "read_only": 1
+  },
+  {
+   "fieldname": "void_reason",
+   "label": "Lý do hủy hiệu lực",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "voided_by",
+   "label": "Người hủy hiệu lực",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "voided_at",
+   "label": "Thời điểm hủy hiệu lực",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  }
+ ],
+ "field_order": [
+  "household",
+  "classification",
+  "period",
+  "valid_from",
+  "valid_to",
+  "basis",
+  "evidence",
+  "notes",
+  "is_legacy",
+  "is_void",
+  "void_reason",
+  "voided_by",
+  "voided_at"
+ ]
+}

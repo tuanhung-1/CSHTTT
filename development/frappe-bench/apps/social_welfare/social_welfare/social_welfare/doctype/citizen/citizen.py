@@ -42,9 +42,7 @@ class Citizen(Document):
 		if not self.national_id:
 			return
 
-		duplicate = frappe.db.exists(
-			"Citizen", {"national_id": self.national_id, "name": ["!=", self.name]}
-		)
+		duplicate = frappe.db.exists("Citizen", {"national_id": self.national_id, "name": ["!=", self.name]})
 		if duplicate:
 			frappe.throw(_("National ID already belongs to Citizen {0}.").format(duplicate))
 
@@ -81,9 +79,7 @@ class Citizen(Document):
 
 		if possible_duplicates:
 			frappe.msgprint(
-				_("Possible duplicate Citizen records: {0}.").format(
-					", ".join(sorted(possible_duplicates))
-				),
+				_("Possible duplicate Citizen records: {0}.").format(", ".join(sorted(possible_duplicates))),
 				title=_("Possible Duplicate"),
 				indicator="orange",
 			)
@@ -101,9 +97,7 @@ class Citizen(Document):
 			frappe.throw(_("A household can have only one citizen marked as Head."))
 
 	def validate_selected_head_household(self):
-		selected_by_household = frappe.db.get_value(
-			"Household", {"head_citizen": self.name}, "name"
-		)
+		selected_by_household = frappe.db.get_value("Household", {"head_citizen": self.name}, "name")
 		if selected_by_household and selected_by_household != self.household:
 			frappe.throw(_("A selected head citizen cannot be moved to another household."))
 

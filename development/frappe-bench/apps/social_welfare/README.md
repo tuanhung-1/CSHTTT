@@ -4,13 +4,17 @@ Ward-level social welfare management system
 
 ### Installation
 
-You can install this app using the [bench](https://github.com/frappe/bench) CLI:
+App này nằm trong monorepo ERPNext/MariaDB của nhóm. Đọc [hướng dẫn code-first](../../../../CODE_FIRST.md) và [tài liệu bàn giao](../../../../PROJECT_HANDOFF.md).
+
+Khi Bench đã đăng ký package `social_welfare` và site đã được tạo:
 
 ```bash
-cd $PATH_TO_YOUR_BENCH
-bench get-app $URL_OF_THIS_REPO --branch version-16
-bench install-app social_welfare
+cd /workspace/development/frappe-bench
+bench --site development.localhost install-app social_welfare
+bench --site development.localhost migrate
 ```
+
+Lệnh trên không tạo môi trường Bench mới. Không dùng `bench get-app` trỏ vào repo monorepo gốc; đây không phải repository độc lập của riêng app. User và dữ liệu nghiệp vụ do mỗi máy tự tạo.
 
 ### Contributing
 

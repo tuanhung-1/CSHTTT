@@ -1,320 +1,205 @@
-# Bàn giao dự án ERPNext / Social Welfare
+# Bàn giao ứng dụng an sinh xã hội phường
 
 Cập nhật: **08/11/2026**, múi giờ Việt Nam.
 
-Tài liệu này ghi lại hiện trạng đã kiểm tra trên máy đang phát triển, để thành viên khác và Codex đọc trước khi làm tiếp. Các mục “đã có trong code”, “đã kiểm tra chạy” và “chưa làm” được ghi riêng để tránh hiểu nhầm mức độ hoàn thành.
+Hướng dẫn cập nhật giữa hai máy: [CODE_FIRST.md](CODE_FIRST.md).
 
-## 1. Mục tiêu và nền tảng thống nhất
+Dự án chỉ dùng **ERPNext/Frappe + MariaDB**. Các mục Odoo/PostgreSQL trong tài liệu nghiên cứu cũ không phải kiến trúc triển khai của app này.
 
-- Xây dựng hệ thống quản lý an sinh xã hội cấp phường.
-- Nền tảng sử dụng: **Frappe + ERPNext**, app nghiệp vụ tự viết tên **`social_welfare`**.
-- Thư mục dự án trên máy hiện tại: `D:\IT_THANG_23T_DT3\CSHTTT\erpnext-system`.
-- Mục tiêu bàn giao tiếp theo: đưa đầy đủ code lên một nhánh riêng trong repo nhóm để bạn khác pull về tiếp tục phát triển.
-- Repo nhóm được người dùng cung cấp: `https://github.com/tuanhung-1/CSHTTT.git`.
-- Nhánh bàn giao đã tạo: **`thang`**, dùng để push vào repo nhóm.
+## 1. Source và Git
 
-Trong dự án có thư mục `odoo-reference`, và trên máy có container Odoo/PostgreSQL đang chạy cho môi trường khác. App `social_welfare` hiện tại sử dụng API, DocType và công cụ Bench của Frappe; không dùng Odoo làm nền tảng chạy.
+- Máy phát triển: `D:\IT_THANG_23T_DT3\CSHTTT\erpnext-system`.
+- Repo nhóm: `https://github.com/tuanhung-1/CSHTTT.git`, nhánh **thang**.
+- `origin` là repo nhóm; `upstream` là repo `frappe/frappe_docker`.
+- Mốc đã push trước đợt sửa hiện tại: **ad616e5**. Các thay đổi lịch sử phân loại, quyền và giao diện được thực hiện sau mốc này; kiểm tra `git status`/`git log` để biết phần nào đã commit và push.
+- Source app được theo dõi trực tiếp trong repo gốc, không dùng submodule.
+- Metadata Git riêng của app trước đây đã được giữ ngoài repo tại `D:\IT_THANG_23T_DT3\CSHTTT\social_welfare.git.backup-20261108`.
 
-## 2. Cấu trúc cần đọc
-
-```text
-erpnext-system/
-├── PROJECT_HANDOFF.md          # Tài liệu bàn giao này
-├── README.md                   # README gốc của Frappe Docker
-├── compose.yaml                # Cấu hình Compose nền cho triển khai
-├── pwd.yml                     # ERPNext demo riêng
-├── .devcontainer/              # Cấu hình môi trường phát triển cục bộ
-├── development/
-│   └── frappe-bench/
-│       ├── apps/
-│       │   ├── frappe/          # Framework
-│       │   ├── erpnext/         # ERPNext
-│       │   └── social_welfare/  # App nghiệp vụ của nhóm
-│       ├── sites/              # Site, cấu hình và file dữ liệu cục bộ
-│       ├── env/                # Môi trường Python cục bộ
-│       └── logs/               # Log cục bộ
-├── overrides/                  # Các biến thể Docker Compose
-├── images/                     # Dockerfile/Containerfile
-├── resources/                  # Script và cấu hình hỗ trợ container
-└── tests/                      # Test của Frappe Docker
+```bash
+git clone -b thang --single-branch https://github.com/tuanhung-1/CSHTTT.git
+cd CSHTTT
 ```
 
-Các đường dẫn trong app dưới đây được tính từ:
+Nhánh mang lịch sử Frappe Docker, có thể không chung gốc với main của repo nhóm. Không force-push hoặc ghi đè nhánh chung.
 
-```text
-development/frappe-bench/apps/social_welfare/
-```
+## 2. Môi trường đã kiểm tra
 
-| Đường dẫn | Nội dung |
+| Thành phần | Phiên bản hoặc cấu hình |
 |---|---|
-| `pyproject.toml` | Metadata, yêu cầu Python, cấu hình Ruff |
-| `social_welfare/__init__.py` | Phiên bản app và kiểm tra quyền vào app |
-| `social_welfare/hooks.py` | Đăng ký app trên màn hình Apps, khai báo fixtures |
-| `social_welfare/social_welfare/doctype/` | Schema JSON, controller Python, JS và test nghiệp vụ |
-| `social_welfare/social_welfare/workspace/social_welfare/social_welfare.json` | Workspace và lối tắt tới 4 DocType |
-| `social_welfare/fixtures/` | Role, trạng thái, hành động và workflow hồ sơ |
-| `social_welfare/public/images/social-welfare.svg` | Logo app |
+| Frappe | 16.35.0, version-16 |
+| ERPNext | 16.36.0, version-16 |
+| social_welfare | 0.0.1; yêu cầu Python >= 3.14 |
+| MariaDB | mariadb:11.8 |
+| Redis | redis-cache và redis-queue |
+| Dev Container | frappe/bench:latest; chưa pin runtime |
+| Site phát triển | development.localhost |
+| Cổng web / realtime / watcher | 8000 / 9000 / 6787 |
 
-## 3. Chức năng đã có trong mã nguồn
+Các container Odoo/PostgreSQL khác trên máy không tham gia app này.
 
-### Citizen — Công dân
+## 3. Vị trí mã nguồn
 
-- Các trường chính: mã công dân, CCCD/giấy tờ định danh, họ tên, ngày sinh, giới tính, quan hệ với chủ hộ, điện thoại, hộ gia đình.
-- Tự sinh mã dạng `CT-000001` khi bỏ trống.
-- Chuẩn hóa số định danh: bỏ khoảng trắng, chuyển chữ cái sang chữ hoa; chặn trùng nếu có nhập số định danh.
-- Chặn ngày sinh trong tương lai.
-- Cảnh báo khả năng trùng theo họ tên + ngày sinh, hoặc theo số điện thoại; đây là cảnh báo, không phải chặn lưu.
-- Mỗi hộ chỉ có tối đa một công dân mang quan hệ `Head`.
-- Không cho chuyển một công dân đang được hộ chọn làm chủ hộ sang hộ khác.
-- Cập nhật số thành viên của hộ khi thêm, sửa, chuyển hộ hoặc xóa công dân.
+App: `development/frappe-bench/apps/social_welfare/`. Các đường dẫn dưới đây tính từ thư mục app:
 
-### Household — Hộ gia đình
+| Đường dẫn | Trách nhiệm |
+|---|---|
+| social_welfare/hooks.py | App route, fixtures, hooks quyền và migration |
+| social_welfare/permissions.py | Phạm vi reviewer, chặn xóa, trang chủ theo role |
+| social_welfare/api.py | Dashboard, lịch sử hộ, hủy hiệu lực có lý do |
+| social_welfare/migrations.py | Hook cài đặt/nâng cấp, tạo role từ source và cập nhật quyền |
+| social_welfare/patches/v0_1/ | Patch chuyển phân loại cũ, đăng ký trong patches.txt và ghi Patch Log |
+| social_welfare/social_welfare/doctype/ | Schema, controller, form JS và test |
+| social_welfare/social_welfare/page/an_sinh_xa_hoi/ | Trang chủ nghiệp vụ |
+| social_welfare/workspace_sidebar/social_welfare.json | Menu tiếng Việt |
+| social_welfare/fixtures/ | Role và workflow |
+| social_welfare/translations/vi.csv | Bản dịch thuật ngữ khi dùng ngôn ngữ tiếng Việt |
+| social_welfare/tests/test_ward_workflow.py | Test lịch sử, quyền và workflow |
 
-- Các trường chính: mã hộ, công dân làm chủ hộ, tên chủ hộ, địa chỉ, số thành viên, thu nhập bình quân, phân loại hộ.
-- Tự sinh mã dạng `HH-2026-00001` khi bỏ trống; phần năm thay đổi theo thời điểm tạo.
-- Thu nhập bình quân không được âm.
-- Công dân được chọn làm chủ hộ phải thuộc chính hộ đó.
-- Trường số thành viên được tính từ các bản ghi Citizen liên kết.
-- Form lọc danh sách chọn chủ hộ theo hộ hiện tại.
+README và các thư mục docs/overrides/images/resources/tests ở gốc chủ yếu thuộc Frappe Docker. Test nghiệp vụ nằm trong app, không phải tests/ ở gốc.
 
-### Support Program — Chương trình hỗ trợ
+## 4. Dữ liệu và chức năng hiện có
 
-- Các trường chính: mã, tên, mô tả, ngày bắt đầu/kết thúc, mức hỗ trợ, nhóm đối tượng, cờ hoạt động.
-- Mức hỗ trợ không được âm.
-- Ngày bắt đầu không được sau ngày kết thúc.
+### Công dân và hộ
 
-### Support Application — Hồ sơ hỗ trợ
+- Citizen: mã tự sinh CT-000001, định danh, họ tên, ngày sinh, giới tính, điện thoại, quan hệ và liên kết hộ.
+- Chuẩn hóa/chặn trùng định danh; cảnh báo khả năng trùng tên/ngày sinh hoặc điện thoại; chặn ngày sinh tương lai.
+- Mỗi hộ tối đa một công dân quan hệ Head. Chủ hộ được chọn phải thuộc hộ, không được chuyển hộ khi vẫn là chủ hộ.
+- Household: mã tự sinh HH-2026-00001, chủ hộ, địa chỉ, tổ dân phố, số thành viên, thu nhập bình quân và người được giao xác minh.
+- Số thành viên tính từ Citizen; thu nhập không âm.
+- Household, Citizen, Support Program có cờ lưu trữ. Role nghiệp vụ không được xóa; controller cũng chặn xóa cứng.
 
-- Liên kết một hộ với một chương trình; lưu ngày hồ sơ, số tiền đề nghị/phê duyệt, lý do, ghi chú xét duyệt và trạng thái workflow.
-- Tự sinh mã dạng `APP-2026-00001` khi bỏ trống.
-- Hồ sơ mới phải bắt đầu ở `Draft`.
-- Số tiền đề nghị và số tiền phê duyệt không được âm.
-- Một hộ chỉ được có một hồ sơ cho cùng một chương trình.
-- Chương trình có `target_group = poor` yêu cầu hộ thuộc `Poor Household`.
-- Chương trình có `target_group = near_poor` yêu cầu hộ thuộc `Near-poor Household`.
-- Các nhóm đối tượng khác chưa có điều kiện phân loại hộ tương ứng trong controller đã đọc.
+### Lịch sử phân loại mới
 
-Các mô tả trên được xác nhận bằng việc đọc code. Chưa kiểm thử đầy đủ từng chức năng qua giao diện trong phiên này.
+- DocType **Household Classification** lưu hộ, phân loại, kỳ, khoảng hiệu lực, căn cứ, minh chứng và ghi chú.
+- Giữ mã nội bộ Poor Household/Near-poor Household/Normal để tương thích; giao diện diễn giải tiếng Việt.
+- Kỳ mới bắt buộc có ngày bắt đầu/kết thúc và căn cứ. Không chấp nhận ngày ngược hoặc khoảng chồng lấn, kể cả ngày biên.
+- Khóa hàng Household trong transaction để tuần tự hóa insert các kỳ của cùng hộ.
+- Bản đã lưu không được sửa nội dung hoặc xóa. Khi có sai sót, lãnh đạo dùng **Hủy hiệu lực**, bắt buộc lý do; giữ bản gốc, người và thời điểm hủy. Cán bộ tạo bản thay thế sau đó.
+- Bản đã hủy không làm căn cứ hiện tại và không chặn kỳ thay thế.
+- Phân loại hiện tại được truy vấn theo ngày, không lấy một nhãn cache có thể hết hạn.
+- Trường poverty_status cũ được giữ nhưng ẩn và chặn sửa. Patch v0_1 đăng ký ở patches.txt sao chép giá trị cũ sang bản is_legacy=1, không tự gán ngày hiệu lực. Patch được ghi nhận một lần trong Patch Log; không còn quét/chuyển dữ liệu mỗi after_migrate. Hook after_install xử lý trường hợp cài app lần đầu.
+- Bản legacy hiển thị **cần rà soát**, không dùng làm căn cứ hiện tại. Trên máy này đã chuyển 3 giá trị cũ thành 3 bản legacy; không tự phân loại mới cho hộ.
 
-## 4. Role và quyền đang định nghĩa
+### Chương trình và hồ sơ hỗ trợ
 
-App có 3 role nghiệp vụ, lưu trong `social_welfare/fixtures/role.json`.
+- Support Program: mã/tên, mô tả, ngày, mức hỗ trợ, nhóm đối tượng, cờ hoạt động/lưu trữ; kiểm tra số tiền và khoảng ngày.
+- Support Application: hộ/chương trình, ngày, số tiền đề nghị/phê duyệt, lý do, kết quả xác minh, ý kiến lãnh đạo và ghi chú chi.
+- Mã tự sinh APP-2026-00001, bắt đầu Draft; tiền không âm.
+- Ràng buộc cũ một hộ/một hồ sơ/cùng chương trình vẫn còn; chưa phải chống trùng chi theo nhiều đợt.
+- Chương trình poor/near_poor kiểm tra **lịch sử hiệu lực tại ngày hồ sơ**, không lấy nhãn legacy. Hiện vẫn là kiểm tra khi lưu, chưa phải Rule Engine ba kết quả.
+- Người trình, người/thời điểm quyết định và xác nhận chi do server ghi.
+- Server kiểm soát trường được sửa theo vai trò và trạng thái, kể cả khi gọi API trực tiếp.
 
-| Role | Citizen, Household, Support Application | Support Program |
-|---|---|---|
-| `Social Welfare Officer` | Tạo, đọc, sửa | Chỉ đọc |
-| `Social Welfare Reviewer` | Tạo, đọc, sửa | Chỉ đọc |
-| `Social Welfare Manager` | Tạo, đọc, sửa, xóa, import | Tạo, đọc, sửa, xóa, import |
+## 5. Ma trận quyền hiện tại
 
-Đây là quyền trong schema DocType; quyền sửa hồ sơ tại từng trạng thái còn chịu ràng buộc bởi workflow.
+| Role | Hộ và công dân | Lịch sử phân loại | Chương trình | Hồ sơ hỗ trợ |
+|---|---|---|---|---|
+| Social Welfare Officer — cán bộ an sinh | Tạo/xem/sửa/lưu trữ; phân công | Xem/thêm kỳ; không sửa/xóa bản đã lưu | Tạo/xem/sửa/lưu trữ | Lập/sửa nháp, bổ sung, chuyển xác minh |
+| Social Welfare Reviewer — người xác minh | Chỉ đọc hộ được giao và công dân trong hộ đó | Chỉ đọc hộ được giao | Đọc | Chỉ hộ được giao; ghi xác minh, trình lãnh đạo |
+| Social Welfare Manager — lãnh đạo | Đọc | Đọc; hủy hiệu lực có lý do qua thao tác riêng | Đọc | Nhập ý kiến/số tiền tại bước chờ duyệt; quyết định |
+| Social Welfare Finance — tài chính | Đọc hộ; không được đọc Citizen | Không có quyền | Đọc | Ghi chú/xác nhận chi sau phê duyệt |
 
-Hàm `has_app_permission()` cho phép `Administrator` hoặc người có ít nhất một trong 3 role trên vào app.
+Giữ ID Reviewer/Manager để dùng tài khoản cũ. Administrator có quyền quản trị đặc biệt của Frappe, không dùng để kiểm chứng quyền cán bộ.
 
-### Workflow hồ sơ
+Cán bộ chọn **Người được giao xác minh** trên hộ. Chưa giao thì reviewer không thấy hộ/hồ sơ đó. Giới hạn có hiệu lực với list, dashboard và đọc trực tiếp. Role có thể cộng gộp, nhưng người trình vẫn bị chặn tự quyết định hồ sơ mình trình.
 
-Fixture: `social_welfare/fixtures/zz_support_application_workflow.json`.
+Sau migrate, Custom DocPerm của 5 DocType thuộc app được reset để dùng ma trận source. Không chỉ chỉnh quyền thủ công ở một máy; cần sửa source và test.
 
-| Trạng thái hiện tại | Hành động | Trạng thái tiếp theo | Role thực hiện |
+### Workflow
+
+| Từ | Hành động | Đến | Vai trò |
 |---|---|---|---|
-| Draft | Submit | Submitted | Officer hoặc Manager |
-| Submitted | Start Review | Reviewing | Reviewer hoặc Manager |
-| Reviewing | Approve | Approved | Reviewer hoặc Manager |
-| Reviewing | Reject | Rejected | Reviewer hoặc Manager |
-| Approved | Mark as Paid | Paid | Reviewer hoặc Manager |
-| Rejected | Reset to Draft | Draft | Reviewer hoặc Manager |
+| Draft | Submit | Submitted | Cán bộ an sinh |
+| Submitted | Start Review | Reviewing | Người xác minh được giao |
+| Reviewing | Complete Verification | Pending Approval | Người xác minh; phải có kết quả |
+| Pending Approval | Approve | Approved | Lãnh đạo; có ý kiến, không phải người trình |
+| Pending Approval | Reject | Rejected | Lãnh đạo; có lý do |
+| Pending Approval | Return for Supplement | Returned | Lãnh đạo; có ý kiến bổ sung |
+| Returned hoặc Rejected | Reset to Draft | Draft | Cán bộ an sinh |
+| Approved | Mark as Paid | Paid | Tài chính; có ghi chú chi |
 
-Trong bảng, Officer/Reviewer/Manager là viết tắt của các role `Social Welfare ...` tương ứng.
+Tất cả vẫn có docstatus=0. **Paid chỉ là xác nhận trạng thái có người/thời gian**, chưa có chứng từ, giao dịch ngân hàng, Disbursement hay đối soát riêng.
 
-Hiện tất cả các trạng thái workflow có `doc_status = 0`. Hành động `Submit` ở đây là chuyển trạng thái workflow, không phải chuyển document sang `docstatus = 1`.
+## 6. Giao diện và tài khoản
 
-`Mark as Paid` hiện là chuyển trạng thái hồ sơ. Chưa xác nhận có tích hợp thanh toán, bút toán hoặc giải ngân ERPNext; không coi trạng thái `Paid` là bằng chứng giao dịch đã được thực hiện.
+- Trang chủ: **/desk/an-sinh-xa-hoi**; app roles dùng trang này làm home. Admin có thể mở trực tiếp URL.
+- Có nút **Đăng xuất** ở góc trên bên phải trên các màn hình Desk, kể cả trang quản trị. Nút kết thúc phiên phía server và về /login; khi hồ sơ chưa lưu thì hỏi trước khi bỏ thay đổi. Mã dùng chung ở public/js/ward_session.js và public/css/ward_session.css.
+- Có số liệu theo quyền, công việc theo vai trò, lối tắt tạo hồ sơ và menu nghiệp vụ tiếng Việt.
+- Form hộ nhóm thông tin, có bảng lịch sử và nút Thêm kỳ phân loại. Form lịch sử có hướng dẫn và thao tác Hủy hiệu lực cho lãnh đạo.
+- Form hỗ trợ có hướng dẫn bước tiếp theo. Nhãn trường dùng tiếng Việt; giao diện chung Frappe phụ thuộc ngôn ngữ người dùng.
+- User trên site: Administrator, officer@example.com, reviewer@example.com, manager@example.com; Guest là tài khoản hệ thống.
+- Đã đặt lại và kiểm tra mật khẩu trong phiên hỗ trợ; không ghi mật khẩu vào source/tài liệu.
+- Đã có role tài chính, **chưa tự tạo tài khoản tài chính trên site phát triển**. Chưa tự phân công hộ cho reviewer.
+- Tài khoản, mật khẩu và dữ liệu không đi theo Git. Máy nhận cần tạo/gán role hoặc restore backup riêng.
 
-## 5. Tài khoản thực tế trên máy hiện tại
+## 7. Chạy và nâng cấp môi trường đã có
 
-Đã truy vấn database của site `development.localhost`:
+Mở Docker Desktop, mở repo riêng trong VS Code rồi chọn **Dev Containers: Reopen in Container**. Nếu gặp lỗi workspace nhiều thư mục, dùng New Window → Open Folder, không mở file .code-workspace.
 
-| Tài khoản | Vai trò chính | Tình trạng |
-|---|---|---|
-| `Administrator` | Quản trị hệ thống | Đang bật |
-| `officer@example.com` | Social Welfare Officer | Đang bật |
-| `reviewer@example.com` | Social Welfare Reviewer | Đang bật |
-| `manager@example.com` | Social Welfare Manager | Đang bật |
-| `Guest` | Khách chưa đăng nhập | Tài khoản hệ thống |
-
-- Đã thử đăng nhập 3 tài khoản nghiệp vụ bằng các mật khẩu do người dùng cung cấp trong cuộc trao đổi; tất cả đều trả HTTP 401, `Invalid login credentials`.
-- Không ghi lại các mật khẩu đã thử vào tài liệu hoặc Git.
-- Chưa xác định mật khẩu đúng, chưa đổi/reset mật khẩu nào và chưa kiểm tra đăng nhập thành công với Administrator.
-- Các tài khoản này là dữ liệu của site cục bộ, **không tự xuất hiện khi người khác clone/pull code**.
-- App chưa có fixture hoặc script tạo sẵn các tài khoản trên. Máy mới cần tạo tài khoản, gán role và đặt mật khẩu riêng.
-
-## 6. Môi trường đã chạy thành công
-
-Thông tin từ `bench --site development.localhost list-apps`:
-
-| Thành phần | Phiên bản |
-|---|---|
-| Frappe | `16.35.0`, nhánh `version-16` |
-| ERPNext | `16.36.0`, nhánh `version-16` |
-| social_welfare | `0.0.1`, nhánh `version-16` |
-
-- `pyproject.toml` của app yêu cầu **Python >= 3.14**.
-- Dev Container dùng image `frappe/bench:latest`; tag này không cố định phiên bản runtime giữa các lần pull.
-- MariaDB: image `mariadb:11.8`.
-- Redis: hai service `redis-cache` và `redis-queue`, image `redis:alpine`.
-- Site cục bộ: **`development.localhost`**.
-- Cổng web: **8000**; realtime: **9000**; asset watcher: **6787**.
-- Database host trong mạng container: `mariadb`.
-- Redis dùng tên service trong mạng container, không phải `localhost`.
-
-### Các việc đã thực hiện trong phiên hỗ trợ
-
-1. Đọc cấu trúc, cấu hình Docker, app nghiệp vụ, quyền, workflow và các test hiện có.
-2. Kiểm tra remote Git và tình trạng Git riêng của app.
-3. Mở thư mục dự án bằng một cửa sổ VS Code riêng để tránh lỗi workspace nhiều thư mục.
-4. Khởi động lại 4 container Dev Container đã có: `frappe`, `mariadb`, `redis-cache`, `redis-queue`.
-5. Kết nối VS Code vào Dev Container.
-6. Chạy `bench start` trong Bench hiện có.
-7. Xác nhận site có đủ 3 app; trang `/login` trả HTTP **200**, `/api/method/ping` trả `{"message":"pong"}`.
-8. Đọc danh sách user/role thực tế và thử đăng nhập theo yêu cầu.
-9. Tạo tài liệu bàn giao này; không sửa logic nghiệp vụ.
-10. Theo yêu cầu push tiếp theo: tạo nhánh `thang`, thêm repo nhóm làm `origin`, giữ Frappe Docker làm `upstream`, đưa source app và Dev Container vào phạm vi theo dõi Git. Xem mục 8 để biết cách kiểm tra remote sau khi push.
-
-Bench trong phiên này được chạy nền bằng `docker exec`; log tại **`/tmp/erpnext-bench-start.log` bên trong container**. Tiến trình này không được cấu hình tự chạy lại sau khi container khởi động lại. Không chạy thêm một `bench start` nếu tiến trình cũ vẫn chiếm các cổng.
-
-## 7. Chạy lại trên máy đã có môi trường và dữ liệu
-
-### Cách dùng VS Code
-
-1. Mở Docker Desktop, chờ Docker Engine sẵn sàng.
-2. Mở một cửa sổ VS Code riêng, chọn **Open Folder** tới thư mục `erpnext-system`.
-3. Dùng extension **Dev Containers** của Microsoft.
-4. Chạy **Dev Containers: Reopen in Container**.
-5. Trong terminal của container:
+Trong terminal container:
 
 ```bash
 cd /workspace/development/frappe-bench
-bench --site development.localhost list-apps
-```
-
-Nếu Bench chưa chạy:
-
-```bash
+bench --site development.localhost backup --with-files
+bench --site development.localhost migrate
 bench use development.localhost
 bench start
 ```
 
-Mở **http://development.localhost:8000/login**. Giữ Docker và cửa sổ Dev Container đang mở; cấu hình hiện tại có `shutdownAction: stopCompose`.
+Không chạy thêm bench start khi tiến trình cũ còn dùng cổng. Migrate có thể mất vài phút vì kiểm tra toàn bộ ERPNext qua bind mount Windows. Sau đổi menu/quyền, refresh cứng hoặc đăng xuất/đăng nhập lại.
 
-### Nếu VS Code báo lỗi workspace
+Mở **http://development.localhost:8000/desk/an-sinh-xa-hoi**. Giữ Docker/Dev Container mở; cấu hình có shutdownAction=stopCompose.
 
-Thông báo đã gặp:
+Bench nền của phiên hỗ trợ trước đã được dừng để người dùng tự chạy bench start trong terminal. File /tmp/erpnext-bench-start.log chỉ là log lần chạy nền trước. Có container trợ giúp **erpnext-local-ports** đưa 8000/9000/6787 ra loopback máy khi không dùng VS Code forward; đây là helper cục bộ, không phải thành phần nghiệp vụ. Dừng helper nếu dùng VS Code forward và bị trùng cổng. Bench chưa được cấu hình tự chạy lại sau restart.
 
-```text
-You need to first save your workspace in a folder containing all its workspace folders.
-```
+Backup trước nâng cấp nằm trong private/backups của site, tiền tố **20261108_155048-development_localhost**, gồm database, cấu hình và public/private files; không đưa lên Git.
 
-Cách xử lý đã dùng: mở **New Window → Open Folder → erpnext-system**, thay vì mở workspace nhiều thư mục hoặc file `.code-workspace`, rồi Reopen in Container.
+### Máy mới
 
-### Nếu lỗi bind mount
+Clone chưa tạo sẵn Bench, env, site hoặc database. Cài mới từ clone sạch vẫn cần hoàn thiện/kiểm chứng riêng; không bench init đè thư mục đang chứa source app.
 
-Bản cấu hình cục bộ ban đầu có mount thư mục anh em `../social-welfare-system` và thư mục `.ssh` của máy cá nhân. Bản cấu hình được bàn giao đã bỏ hai mount này cùng kết nối SQLTools chứa thông tin đăng nhập cục bộ, để máy nhận không phụ thuộc các đường dẫn đó. Container đang chạy có thể vẫn giữ mount cũ đến lần tạo lại tiếp theo.
+Cần Bench dùng Python >=3.14, Frappe/ERPNext version-16; cài package app vào Bench; cấu hình MariaDB/Redis bằng tên service; tạo site/cài app; migrate/build assets khi cần; tạo user/gán role/phân công hộ.
 
-### Phân biệt cấu hình demo
+pwd.yml tạo ERPNext demo riêng ở cổng 8080, không cài social_welfare. Shared Dev Container đã bỏ mount .ssh và thư mục Odoo reference của máy cá nhân.
 
-`docker compose -f pwd.yml up -d` tạo một môi trường ERPNext demo riêng, cổng **8080**. Nó không thay thế môi trường phát triển đang có `social_welfare`. Mật khẩu Administrator khai báo trong demo không chứng minh mật khẩu của site `development.localhost`.
+## 8. Kiểm thử đã thực hiện
 
-## 8. Git: nhánh bàn giao và thay đổi đóng gói
+**16 test đạt** trên site riêng **test_ward.localhost**:
 
-Tại thời điểm ghi tài liệu:
+- 7 test cũ: công dân, chủ hộ, số thành viên, mã, định danh, thu nhập/ngày sinh và tạo hồ sơ.
+- 9 test mới: kỳ hiệu lực và ngày biên; chồng lấn/ngày/căn cứ sai; lịch sử bất biến và hủy có truy vết; legacy và migration chạy lại; giới hạn reviewer qua list/đọc trực tiếp/dashboard; quyền và chặn xóa; hồ sơ dùng lịch sử hiệu lực; workflow bốn vai trò và giả mạo trường; chống tự phê duyệt khi có nhiều role.
+- Test cũ đã chuyển sang IntegrationTestCase tương thích Frappe 16. Ruff check/format đã chạy; JSON và cú pháp JavaScript đã kiểm tra.
+- Nút Đăng xuất đã kiểm tra trên trang chủ cán bộ, trang User/Administrator và màn hình 390px: về /login, API bảo vệ trả 403 sau logout; hủy xác nhận khi chưa lưu giữ nguyên phiên.
+- Đã kiểm tra browser với đủ 4 vai trò trên site test: home, menu và các thẻ theo quyền; tài chính không thấy Citizen/lịch sử. Đã kiểm tra hai kỳ trên form hộ, form tạo phân loại và màn hình rộng 390px không tràn ngang. Không ghi nhận pageerror trong lần chạy cuối. Trên site phát triển cũng đã mở bằng 3 tài khoản hiện có.
 
-```text
-Repo gốc: erpnext-system
-Nhánh bàn giao: thang
-Remote origin: https://github.com/tuanhung-1/CSHTTT.git
-Remote upstream: https://github.com/frappe/frappe_docker.git
-```
-
-- Source `social_welfare` được theo dõi trực tiếp trong repo gốc, ở `development/frappe-bench/apps/social_welfare/`; không dùng submodule.
-- Metadata Git riêng của app đã được di chuyển ra ngoài repo, tại `D:\IT_THANG_23T_DT3\CSHTTT\social_welfare.git.backup-20261108` trên máy phát triển. Đây là bản sao lưu lịch sử và index cũ, không chứa bản sao working tree và không được đưa lên GitHub.
-- Các thay đổi trước đây chưa commit trong Git riêng của app được đưa vào bản bàn giao: `__init__.py`, `hooks.py`, fixtures, logo, DocType, workspace.
-- `.gitignore` gốc đã cho phép source app và hai file cấu hình `.devcontainer/devcontainer.json`, `.devcontainer/docker-compose.yml` đi theo Git, vẫn bỏ qua phần runtime Bench, dữ liệu site, env và cache.
-- Không thay đổi nhánh `main` hoặc `feat/odoo` của repo nhóm.
-
-Trước khi đóng gói, Git gốc báo sạch vì source app bị ignore và có Git lồng nhau. Hai vấn đề này đã được xử lý cho nhánh bàn giao. Vẫn cần kiểm tra danh sách file mỗi lần commit để tránh bỏ sót source hoặc đưa dữ liệu cục bộ lên.
-
-### Người nhận tải nhánh bàn giao
+Sau khi chuẩn bị site test đã cài app và bật allow_tests:
 
 ```bash
-git clone --branch thang --single-branch https://github.com/tuanhung-1/CSHTTT.git
-cd CSHTTT
+bench --site test_ward.localhost run-tests --app social_welfare --skip-before-tests
 ```
 
-Nếu đã clone repo và working tree không có thay đổi cần xử lý:
+Không dùng --skip-test-records: phiên bản Frappe này báo deprecated và thoát sớm. Đọc tổng kết OK/FAILED trong log, không chỉ dựa exit code Bench. Không chạy test suite trên site chứa dữ liệu cần giữ.
 
-```bash
-git fetch origin
-git switch thang
-git pull --ff-only origin thang
-```
+## 9. Phần còn thiếu theo đề tài
 
-Đọc `PROJECT_HANDOFF.md` trước khi chạy môi trường. Không cần `git submodule update` cho app này. Kiểm tra nhánh trên remote bằng `git ls-remote --heads origin thang`; chỉ coi push hoàn tất khi remote có commit tương ứng.
+- Nhóm đối tượng chính sách cho hộ/cá nhân.
+- Policy/Version/Rule và khóa phiên bản đã dùng.
+- Rule Engine ba kết quả, Eligibility Run/Result, snapshot và chi tiết điều kiện.
+- Verification độc lập có phân công/hạn/minh chứng; hiện mới phân công theo hộ và ghi chú trên hồ sơ.
+- Danh sách trình theo đợt, quyết định/ngoại lệ có lịch sử độc lập; hiện workflow theo từng hồ sơ.
+- Disbursement/Benefit, tiền/hiện vật nhiều đợt, thất bại/hủy/đối soát và ràng buộc chống chi trùng.
+- Báo cáo thực chi, export mẫu, AI/RAG có nguồn và fallback.
+- Test restore backup, cài mới sạch và pin runtime.
 
-Các file Compose có giá trị mật khẩu mặc định dùng cho phát triển/demo; người nhận cần cấu hình phù hợp với môi trường của mình. Đây không phải mật khẩu đã xác nhận cho các user nghiệp vụ.
+Không coi dashboard là báo cáo tài chính, ghi chú là toàn bộ phân hệ xác minh, hoặc track_changes là audit đầy đủ.
 
-Repo nhóm đã được khởi tạo riêng với README; lịch sử Frappe Docker có thể không chung gốc với `main` của repo nhóm. Chọn cách tích hợp trước khi mở Pull Request; không tự force-push hoặc ghi đè nhánh chung.
+## 10. Quy ước phát triển tiếp
 
-### Những gì không đi theo Git
+- Theo nghiệp vụ tài liệu/Canva, nhưng chỉ dùng ERPNext/MariaDB.
+- Sửa trong social_welfare, hạn chế thay core Frappe/ERPNext.
+- Giữ lịch sử và căn cứ, không suy diễn hiệu lực/quyền hưởng từ nhãn legacy.
+- Backup trước đổi schema/quyền trên site đang dùng; migration phải chạy lại được, test riêng và kiểm tra UI theo role.
+- Không commit sites, env, node_modules, logs, database, backup, secret hoặc mật khẩu. .gitignore đã loại runtime.
+- Cập nhật tài liệu khi thay cách chạy, nghiệp vụ hoặc mức độ kiểm chứng.
 
-- Database MariaDB, Docker volumes.
-- User, mật khẩu, hồ sơ công dân/hộ gia đình và dữ liệu nghiệp vụ đang nhập trên site.
-- Môi trường Python `env/`, `node_modules/`, cache, log.
-- `sites/*/site_config.json`, khóa mã hóa và thông tin kết nối bí mật.
-
-## 9. Máy mới sau khi pull: chưa phải chỉ cần bench start
-
-Quy trình khởi động ở mục 7 chỉ áp dụng khi đã có Bench, dependencies, site và database. **Chưa thực hiện kiểm chứng cài mới từ một bản clone sạch** trong phiên này.
-
-Sau khi hoàn tất đóng gói Git, cần viết và thử quy trình bootstrap trên máy sạch:
-
-1. Có Docker, VS Code và Dev Containers; clone đúng repo/nhánh.
-2. Có cấu hình Dev Container dùng chung, không phụ thuộc đường dẫn cá nhân.
-3. Khởi tạo Bench và lấy Frappe/ERPNext nhánh `version-16`, dùng Python phù hợp với app.
-4. Đưa source `social_welfare` vào Bench và cài package/dependencies; không mặc định rằng copy thư mục app là đủ.
-5. Cấu hình MariaDB, Redis theo tên service của Compose.
-6. Tạo site mới, cài `erpnext` và `social_welfare`; hoặc khôi phục backup được chia sẻ riêng nếu cần dữ liệu cũ.
-7. Đồng bộ schema/fixtures, build assets, tạo user và gán role.
-8. Kiểm tra đăng nhập, quyền và workflow bằng tài khoản thực tế.
-
-Tên site trên máy nhận có thể khác; thay `development.localhost` trong các lệnh cho đúng. Không sao chép mật khẩu hoặc cấu hình site cá nhân để mặc định cho cả nhóm.
-
-## 10. Test và mức độ kiểm chứng
-
-Test nghiệp vụ hiện có trong source:
-
-- `test_citizen.py`: chủ hộ duy nhất, số thành viên, ràng buộc chủ hộ khi chuyển hộ, thu nhập âm, ngày sinh tương lai, tự sinh mã, chuẩn hóa/trùng số định danh, trùng mã.
-- `test_support_application.py`: tự sinh mã hồ sơ và trạng thái ban đầu Draft.
-- `tests/` ở gốc thuộc Frappe Docker, khác với test của app nghiệp vụ.
-
-**Chưa chạy test suite trong phiên hỗ trợ này.** Chỉ đã kiểm tra app được cài, HTTP trang đăng nhập, API ping và các lần đăng nhập nêu trên. Chưa xác nhận toàn bộ workflow, phân quyền và cài đặt trên máy mới hoạt động đúng.
-
-Khi cần kiểm thử, dùng site test riêng đã cài đủ app và cấu hình cho phép chạy test theo Frappe. Ví dụ, sau khi đã chuẩn bị site test:
-
-```bash
-bench --site <test-site> run-tests --app social_welfare
-```
-
-Không tự chạy test trên site đang chứa dữ liệu cần giữ.
-
-## 11. Thứ tự làm tiếp cho thành viên và Codex
-
-1. Đọc tài liệu này, kiểm tra lại `git status`, `git remote -v` và nhánh hiện tại ở repo gốc; app được theo dõi trực tiếp trong repo này.
-2. Xác nhận đã tải đúng nhánh `thang`, có source app, fixtures và cấu hình Dev Container.
-3. Thử clone/cài mới và bổ sung hướng dẫn bootstrap có thể tái lập.
-4. Khôi phục quyền đăng nhập cho các user thử nghiệm theo yêu cầu của người quản lý; không tự đoán hoặc thay mật khẩu hàng loạt.
-5. Kiểm thử quyền của 3 role, chuyển trạng thái hồ sơ và các ràng buộc dữ liệu.
-6. Tiếp tục tính năng mới theo yêu cầu nhóm, ưu tiên sửa trong app `social_welfare`; xem xét kỹ trước khi thay đổi framework `frappe` hoặc core `erpnext`.
-7. Cập nhật tài liệu này khi thay đổi cách chạy, role, workflow, Git hoặc phạm vi đã kiểm chứng. Không đưa mật khẩu vào tài liệu.
-
-Prompt gợi ý để người nhận bắt đầu với Codex:
-
-> Đọc PROJECT_HANDOFF.md, sau đó kiểm tra hiện trạng repo và app social_welfare. Dự án dùng Frappe/ERPNext. Xác định những phần đã có và phần còn thiếu để chạy trên máy này, rồi tiếp tục công việc theo yêu cầu của tôi. Không mặc định tài khoản hoặc database trên máy cũ đã đi theo Git.
+Prompt gợi ý cho Codex: Đọc PROJECT_HANDOFF.md, kiểm tra Git và source social_welfare. Giữ lịch sử phân loại, giới hạn reviewer theo hộ được giao và tách người trình/người duyệt/tài chính. Kiểm thử trên site riêng trước khi áp dụng lên site đang dùng.

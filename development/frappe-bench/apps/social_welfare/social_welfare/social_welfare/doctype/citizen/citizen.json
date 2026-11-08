@@ -1,6 +1,6 @@
 {
  "actions": [],
- "allow_rename": 1,
+ "allow_rename": 0,
  "autoname": "field:citizen_code",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -12,7 +12,8 @@
   "gender",
   "relationship",
   "phone",
-  "household"
+  "household",
+  "is_archived"
  ],
  "fields": [
   {
@@ -20,9 +21,9 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Citizen Code",
+   "label": "Mã công dân",
    "unique": 1,
-   "description": "Leave blank to generate automatically.",
+   "description": "Để trống để hệ thống tự tạo mã.",
    "read_only_depends_on": "eval:!doc.__islocal"
   },
   {
@@ -31,7 +32,7 @@
    "in_global_search": 1,
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "National ID / CCCD",
+   "label": "Số định danh / CCCD",
    "unique": 1
   },
   {
@@ -39,34 +40,34 @@
    "fieldtype": "Data",
    "in_global_search": 1,
    "in_list_view": 1,
-   "label": "Full Name",
+   "label": "Họ và tên",
    "reqd": 1
   },
   {
    "fieldname": "date_of_birth",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "Date of Birth"
+   "label": "Ngày sinh"
   },
   {
    "fieldname": "gender",
    "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Gender",
+   "label": "Giới tính",
    "options": "\nMale\nFemale\nOther"
   },
   {
    "fieldname": "relationship",
    "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Relationship",
+   "label": "Quan hệ với chủ hộ",
    "options": "\nHead\nSpouse\nChild\nParent\nOther"
   },
   {
    "fieldname": "phone",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Phone",
+   "label": "Số điện thoại",
    "options": "Phone"
   },
   {
@@ -74,9 +75,16 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Household",
+   "label": "Hộ gia đình",
    "options": "Household",
    "reqd": 1
+  },
+  {
+   "fieldname": "is_archived",
+   "label": "Đã lưu trữ",
+   "fieldtype": "Check",
+   "default": "0",
+   "in_standard_filter": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -86,24 +94,21 @@
  "naming_rule": "By fieldname",
  "permissions": [
   {
-   "create": 1,
-   "read": 1,
    "role": "Social Welfare Officer",
-   "write": 1
-  },
-  {
-   "create": 1,
    "read": 1,
-   "role": "Social Welfare Reviewer",
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "read": 1,
-   "role": "Social Welfare Manager",
+   "report": 1,
    "write": 1,
-   "import": 1
+   "create": 1
+  },
+  {
+   "role": "Social Welfare Reviewer",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Social Welfare Manager",
+   "read": 1,
+   "report": 1
   }
  ],
  "show_name_in_global_search": 1,
@@ -112,5 +117,5 @@
  "states": [],
  "title_field": "full_name",
  "track_changes": 1,
- "allow_import": 1
+ "allow_import": 0
 }

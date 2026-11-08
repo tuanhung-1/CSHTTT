@@ -4,7 +4,7 @@
 from uuid import uuid4
 
 import frappe
-from frappe.tests.utils import FrappeTestCase
+from frappe.tests import IntegrationTestCase as FrappeTestCase
 from frappe.utils import add_days, nowdate
 
 

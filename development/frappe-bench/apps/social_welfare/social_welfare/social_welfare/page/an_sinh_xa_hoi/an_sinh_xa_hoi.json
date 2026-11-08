@@ -1,0 +1,22 @@
+{
+ "doctype": "Page",
+ "name": "an-sinh-xa-hoi",
+ "page_name": "an-sinh-xa-hoi",
+ "title": "An sinh xã hội phường",
+ "module": "Social Welfare",
+ "standard": "Yes",
+ "roles": [
+  {
+   "role": "Social Welfare Officer"
+  },
+  {
+   "role": "Social Welfare Reviewer"
+  },
+  {
+   "role": "Social Welfare Manager"
+  },
+  {
+   "role": "Social Welfare Finance"
+  }
+ ]
+}

@@ -1,0 +1,39 @@
+Social Welfare,An sinh xã hội
+Household,Hộ gia đình
+Citizen,Công dân
+Household Classification,Lịch sử phân loại
+Support Program,Chương trình hỗ trợ
+Support Application,Hồ sơ hỗ trợ
+Social Welfare Officer,Cán bộ an sinh
+Social Welfare Reviewer,Người xác minh
+Social Welfare Manager,Lãnh đạo phường
+Social Welfare Finance,Cán bộ tài chính
+Poor Household,Hộ nghèo
+Near-poor Household,Hộ cận nghèo
+Normal,Không thuộc hộ nghèo hoặc cận nghèo
+Draft,Nháp
+Submitted,Đã tiếp nhận
+Reviewing,Đang xác minh
+Pending Approval,Chờ lãnh đạo duyệt
+Returned,Yêu cầu bổ sung
+Approved,Đã phê duyệt
+Rejected,Từ chối
+Paid,Đã xác nhận chi
+Submit,Chuyển xác minh
+Start Review,Bắt đầu xác minh
+Complete Verification,Trình lãnh đạo
+Approve,Phê duyệt
+Reject,Từ chối
+Return for Supplement,Yêu cầu bổ sung
+Mark as Paid,Xác nhận đã chi
+Reset to Draft,Đưa về nháp
+Male,Nam
+Female,Nữ
+Other,Khác
+Head,Chủ hộ
+Spouse,Vợ hoặc chồng
+Child,Con
+Parent,Cha hoặc mẹ
+poor,Hộ nghèo
+near_poor,Hộ cận nghèo
+disaster,Ảnh hưởng thiên tai
