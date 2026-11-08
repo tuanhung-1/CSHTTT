@@ -32,6 +32,18 @@ class TestCitizen(FrappeTestCase):
 			}
 		).insert(ignore_permissions=True)
 
+	def test_first_household_and_citizen_can_be_created_in_order(self):
+		self.assertFalse(frappe.get_meta("Household").get_field("head_citizen").reqd)
+		household = frappe.get_doc({"doctype": "Household", "head_name": "First household head"}).insert(
+			ignore_permissions=True
+		)
+		self.assertFalse(household.head_citizen)
+		self.assertEqual(household.member_count, 0)
+
+		citizen = self.make_citizen(household.name, full_name="First household head", relationship="Head")
+		self.assertEqual(frappe.db.get_value("Household", household.name, "member_count"), 1)
+		self.assertEqual(frappe.db.get_value("Household", household.name, "head_citizen"), citizen.name)
+
 	def test_single_head_and_member_count(self):
 		household = self.make_household()
 		self.make_citizen(household.name, relationship="Head")
@@ -45,8 +57,8 @@ class TestCitizen(FrappeTestCase):
 		other_household = self.make_household()
 		citizen = self.make_citizen(household.name, relationship="Head")
 
-		household.head_citizen = citizen.name
-		household.save(ignore_permissions=True)
+		household.reload()
+		self.assertEqual(household.head_citizen, citizen.name)
 
 		citizen.household = other_household.name
 		with self.assertRaises(frappe.ValidationError):

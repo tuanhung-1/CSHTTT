@@ -5,14 +5,23 @@ frappe.ui.form.on("Household", {
 	setup(frm) {
 		frm.set_query("head_citizen", () => ({
 			filters: {
-				household: frm.doc.name,
+				household: frm.is_new() ? "" : frm.doc.name,
 			},
 		}));
 	},
 	refresh(frm) {
+		frm.toggle_display("head_citizen", !frm.is_new());
 		if (frm.is_new()) {
+			frm.set_intro("Bước 1/2: Nhập họ tên chủ hộ và lưu hồ sơ hộ. Chưa cần tạo hay chọn Công dân làm chủ hộ. Sau khi lưu, hãy chọn Thêm công dân vào hộ.", "blue");
 			frm.fields_dict.classification_history.$wrapper.html('<p class="text-muted">Lưu hồ sơ hộ trước khi thêm lịch sử phân loại.</p>');
 			return;
+		}
+		frm.set_intro("Bước 2/2: Thêm công dân vào hộ. Nếu là chủ hộ, chọn quan hệ Chủ hộ; hệ thống sẽ liên kết công dân đó với hồ sơ hộ.", "blue");
+		if (frappe.model.can_create("Citizen")) {
+			frm.add_custom_button("Thêm công dân vào hộ", () => frappe.new_doc("Citizen", {
+				household: frm.doc.name,
+				...(Number(frm.doc.member_count) === 0 ? { full_name: frm.doc.head_name, relationship: "Head" } : {}),
+			}));
 		}
 		if (!frappe.model.can_read("Household Classification")) {
 			frm.toggle_display("classification_section", false);

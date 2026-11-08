@@ -22,12 +22,21 @@ class Citizen(Document):
 
 	def after_insert(self):
 		update_member_count(self.household)
+		self.link_first_household_head()
 
 	def on_update(self):
 		previous = self.get_doc_before_save()
 		update_member_count(self.household)
 		if previous and previous.household != self.household:
 			update_member_count(previous.household)
+		if self.relationship == "Head":
+			self.link_first_household_head()
+
+	def link_first_household_head(self):
+		if self.relationship != "Head" or not self.household:
+			return
+		if not frappe.db.get_value("Household", self.household, "head_citizen"):
+			frappe.db.set_value("Household", self.household, "head_citizen", self.name)
 
 	def after_delete(self):
 		update_member_count(self.household)

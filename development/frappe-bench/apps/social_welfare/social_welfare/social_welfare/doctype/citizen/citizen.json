@@ -77,6 +77,7 @@
    "in_standard_filter": 1,
    "label": "Hộ gia đình",
    "options": "Household",
+   "description": "Tạo và lưu hồ sơ hộ gia đình trước khi thêm công dân.",
    "reqd": 1
   },
   {

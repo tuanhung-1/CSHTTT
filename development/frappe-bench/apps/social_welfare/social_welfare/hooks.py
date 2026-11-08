@@ -39,8 +39,8 @@ app_include_css = "/assets/social_welfare/css/ward_session.css"
 app_include_js = "/assets/social_welfare/js/ward_session.js"
 
 # include js, css files in header of web template
-# web_include_css = "/assets/social_welfare/css/social_welfare.css"
-# web_include_js = "/assets/social_welfare/js/social_welfare.js"
+web_include_css = "/assets/social_welfare/css/ward_login.css"
+web_include_js = "/assets/social_welfare/js/ward_login.js"
 
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "social_welfare/public/scss/website"

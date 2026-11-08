@@ -8,3 +8,23 @@
     outline: 2px solid var(--primary);
     outline-offset: 2px;
 }
+
+/* The standard activity rail (modified time, comments, likes) crowds ward lists. */
+body:is(
+    [data-route^="List/Household"],
+    [data-route^="List/Citizen"],
+    [data-route^="List/Support Program"],
+    [data-route^="List/Support Application"]
+) .frappe-list .list-row > .level-right {
+    display: none;
+}
+
+body:is(
+    [data-route^="List/Household"],
+    [data-route^="List/Citizen"],
+    [data-route^="List/Support Program"],
+    [data-route^="List/Support Application"]
+) .frappe-list .list-row > .level-left {
+    flex: 1 1 100%;
+    min-width: 0;
+}

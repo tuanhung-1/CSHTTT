@@ -38,7 +38,8 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Công dân làm chủ hộ",
-   "options": "Citizen"
+   "options": "Citizen",
+   "description": "Lưu hộ trước, thêm công dân vào hộ, rồi chọn chủ hộ. Có thể để trống khi tạo hộ."
   },
   {
    "description": "Tên chủ hộ hiển thị trên hồ sơ; có thể liên kết công dân làm chủ hộ bên dưới.",
