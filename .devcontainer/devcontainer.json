@@ -1,0 +1,60 @@
+{
+  "name": "Frappe Bench",
+  "forwardPorts": [
+    8000,
+    9000,
+    6787
+  ],
+  "portsAttributes": {
+    "6787": {
+      "label": "Frappe asset watcher",
+      "onAutoForward": "silent"
+    },
+    "8000-8099": {
+      "label": "Frappe web",
+      "protocol": "http",
+      "onAutoForward": "notify"
+    },
+    "9000-9099": {
+      "label": "Frappe realtime",
+      "onAutoForward": "silent"
+    }
+  },
+  "otherPortsAttributes": {
+    "onAutoForward": "ignore"
+  },
+  "remoteUser": "frappe",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-vscode.live-server",
+        "grapecity.gc-excelviewer",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-mysql",
+        "vue.volar",
+        "esbenp.prettier-vscode",
+        "charliermarsh.ruff",
+        "openai.chatgpt"
+      ],
+      "settings": {
+        "remote.autoForwardPorts": true,
+        "remote.autoForwardPortsSource": "process",
+        "remote.restoreForwardedPorts": true,
+        "remote.localPortHost": "localhost",
+        "terminal.integrated.profiles.linux": {
+          "frappe bash": {
+            "path": "/bin/bash"
+          }
+        },
+        "terminal.integrated.defaultProfile.linux": "frappe bash",
+        "debug.node.autoAttach": "disabled"
+      }
+    }
+  },
+  "dockerComposeFile": "./docker-compose.yml",
+  "service": "frappe",
+  "workspaceFolder": "/workspace/development",
+  "shutdownAction": "stopCompose",
+  "postCreateCommand": "uv tool install pre-commit"
+}

@@ -1,0 +1,116 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:citizen_code",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "citizen_code",
+  "national_id",
+  "full_name",
+  "date_of_birth",
+  "gender",
+  "relationship",
+  "phone",
+  "household"
+ ],
+ "fields": [
+  {
+   "fieldname": "citizen_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Citizen Code",
+   "unique": 1,
+   "description": "Leave blank to generate automatically.",
+   "read_only_depends_on": "eval:!doc.__islocal"
+  },
+  {
+   "fieldname": "national_id",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "National ID / CCCD",
+   "unique": 1
+  },
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "label": "Full Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "date_of_birth",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date of Birth"
+  },
+  {
+   "fieldname": "gender",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Gender",
+   "options": "\nMale\nFemale\nOther"
+  },
+  {
+   "fieldname": "relationship",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Relationship",
+   "options": "\nHead\nSpouse\nChild\nParent\nOther"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Phone",
+   "options": "Phone"
+  },
+  {
+   "fieldname": "household",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Household",
+   "options": "Household",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "module": "Social Welfare",
+ "name": "Citizen",
+ "naming_rule": "By fieldname",
+ "permissions": [
+  {
+   "create": 1,
+   "read": 1,
+   "role": "Social Welfare Officer",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "role": "Social Welfare Reviewer",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "Social Welfare Manager",
+   "write": 1,
+   "import": 1
+  }
+ ],
+ "show_name_in_global_search": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "full_name",
+ "track_changes": 1,
+ "allow_import": 1
+}

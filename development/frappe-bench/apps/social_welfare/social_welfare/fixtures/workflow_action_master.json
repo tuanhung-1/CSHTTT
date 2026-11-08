@@ -1,0 +1,32 @@
+[
+ {
+  "doctype": "Workflow Action Master",
+  "name": "Submit",
+  "workflow_action_name": "Submit"
+ },
+ {
+  "doctype": "Workflow Action Master",
+  "name": "Start Review",
+  "workflow_action_name": "Start Review"
+ },
+ {
+  "doctype": "Workflow Action Master",
+  "name": "Approve",
+  "workflow_action_name": "Approve"
+ },
+ {
+  "doctype": "Workflow Action Master",
+  "name": "Reject",
+  "workflow_action_name": "Reject"
+ },
+ {
+  "doctype": "Workflow Action Master",
+  "name": "Mark as Paid",
+  "workflow_action_name": "Mark as Paid"
+ },
+ {
+  "doctype": "Workflow Action Master",
+  "name": "Reset to Draft",
+  "workflow_action_name": "Reset to Draft"
+ }
+]

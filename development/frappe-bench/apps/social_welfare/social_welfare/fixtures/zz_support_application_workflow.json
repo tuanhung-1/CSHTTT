@@ -1,0 +1,154 @@
+[
+ {
+  "doctype": "Workflow",
+  "document_type": "Support Application",
+  "is_active": 1,
+  "name": "Support Application Workflow",
+  "override_status": 0,
+  "send_email_alert": 0,
+  "states": [
+   {
+    "allow_edit": "Social Welfare Officer",
+    "doc_status": "0",
+    "doctype": "Workflow Document State",
+    "send_email": 0,
+    "state": "Draft"
+   },
+   {
+    "allow_edit": "Social Welfare Reviewer",
+    "doc_status": "0",
+    "doctype": "Workflow Document State",
+    "send_email": 0,
+    "state": "Submitted"
+   },
+   {
+    "allow_edit": "Social Welfare Reviewer",
+    "doc_status": "0",
+    "doctype": "Workflow Document State",
+    "send_email": 0,
+    "state": "Reviewing"
+   },
+   {
+    "allow_edit": "Social Welfare Reviewer",
+    "doc_status": "0",
+    "doctype": "Workflow Document State",
+    "send_email": 0,
+    "state": "Approved"
+   },
+   {
+    "allow_edit": "Social Welfare Reviewer",
+    "doc_status": "0",
+    "doctype": "Workflow Document State",
+    "send_email": 0,
+    "state": "Rejected"
+   },
+   {
+    "allow_edit": "Social Welfare Reviewer",
+    "doc_status": "0",
+    "doctype": "Workflow Document State",
+    "send_email": 0,
+    "state": "Paid"
+   }
+  ],
+  "transitions": [
+   {
+    "action": "Submit",
+    "allow_self_approval": 1,
+    "allowed": "Social Welfare Officer",
+    "doctype": "Workflow Transition",
+    "next_state": "Submitted",
+    "state": "Draft"
+   },
+   {
+    "action": "Start Review",
+    "allow_self_approval": 1,
+    "allowed": "Social Welfare Reviewer",
+    "doctype": "Workflow Transition",
+    "next_state": "Reviewing",
+    "state": "Submitted"
+   },
+   {
+    "action": "Approve",
+    "allow_self_approval": 1,
+    "allowed": "Social Welfare Reviewer",
+    "doctype": "Workflow Transition",
+    "next_state": "Approved",
+    "state": "Reviewing"
+   },
+   {
+    "action": "Reject",
+    "allow_self_approval": 1,
+    "allowed": "Social Welfare Reviewer",
+    "doctype": "Workflow Transition",
+    "next_state": "Rejected",
+    "state": "Reviewing"
+   },
+   {
+    "action": "Mark as Paid",
+    "allow_self_approval": 1,
+    "allowed": "Social Welfare Reviewer",
+    "doctype": "Workflow Transition",
+    "next_state": "Paid",
+    "state": "Approved"
+   },
+   {
+    "action": "Reset to Draft",
+    "allow_self_approval": 1,
+    "allowed": "Social Welfare Reviewer",
+    "doctype": "Workflow Transition",
+    "next_state": "Draft",
+    "state": "Rejected"
+   },
+   {
+    "action": "Submit",
+    "allow_self_approval": 1,
+    "allowed": "Social Welfare Manager",
+    "doctype": "Workflow Transition",
+    "next_state": "Submitted",
+    "state": "Draft"
+   },
+   {
+    "action": "Start Review",
+    "allow_self_approval": 1,
+    "allowed": "Social Welfare Manager",
+    "doctype": "Workflow Transition",
+    "next_state": "Reviewing",
+    "state": "Submitted"
+   },
+   {
+    "action": "Approve",
+    "allow_self_approval": 1,
+    "allowed": "Social Welfare Manager",
+    "doctype": "Workflow Transition",
+    "next_state": "Approved",
+    "state": "Reviewing"
+   },
+   {
+    "action": "Reject",
+    "allow_self_approval": 1,
+    "allowed": "Social Welfare Manager",
+    "doctype": "Workflow Transition",
+    "next_state": "Rejected",
+    "state": "Reviewing"
+   },
+   {
+    "action": "Mark as Paid",
+    "allow_self_approval": 1,
+    "allowed": "Social Welfare Manager",
+    "doctype": "Workflow Transition",
+    "next_state": "Paid",
+    "state": "Approved"
+   },
+   {
+    "action": "Reset to Draft",
+    "allow_self_approval": 1,
+    "allowed": "Social Welfare Manager",
+    "doctype": "Workflow Transition",
+    "next_state": "Draft",
+    "state": "Rejected"
+   }
+  ],
+  "workflow_name": "Support Application Workflow",
+  "workflow_state_field": "workflow_state"
+ }
+]

@@ -1,0 +1,107 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:code",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "code",
+  "program_name",
+  "description",
+  "start_date",
+  "end_date",
+  "support_amount",
+  "target_group",
+  "active"
+ ],
+ "fields": [
+  {
+   "fieldname": "code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Program Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "program_name",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "label": "Program Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Start Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "End Date",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "support_amount",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Standard Support Amount",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "target_group",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Target Group",
+   "options": "\npoor\nnear_poor\ndisaster\npolicy\nother"
+  },
+  {
+   "default": "1",
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Active"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "module": "Social Welfare",
+ "name": "Support Program",
+ "naming_rule": "By fieldname",
+ "permissions": [
+  {
+   "read": 1,
+   "role": "Social Welfare Officer"
+  },
+  {
+   "read": 1,
+   "role": "Social Welfare Reviewer"
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "Social Welfare Manager",
+   "write": 1,
+   "import": 1
+  }
+ ],
+ "show_name_in_global_search": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "program_name",
+ "track_changes": 1,
+ "allow_import": 1
+}

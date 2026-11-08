@@ -10,6 +10,13 @@ development/*
 !development/apps-example.json
 !development/vscode-example/
 
+# Track the custom app while keeping the local Bench runtime private.
+!development/frappe-bench/
+development/frappe-bench/*
+!development/frappe-bench/apps/
+development/frappe-bench/apps/*
+!development/frappe-bench/apps/social_welfare/
+
 # Pycharm
 .idea
 
@@ -17,14 +24,25 @@ development/*
 .vscode/**
 !.vscode/extensions.json
 
-# VS Code devcontainer
-.devcontainer
+# Shared VS Code devcontainer configuration
+.devcontainer/*
+!.devcontainer/devcontainer.json
+!.devcontainer/docker-compose.yml
 *.code-workspace
 
 # Python
 *.pyc
 __pycache__
 venv
+env/
+.venv/
+.ruff_cache/
+.pytest_cache/
+.env.*
+!.env.example
+!.env.sample
+site_config.json
+common_site_config.json
 
 # NodeJS
 node_modules

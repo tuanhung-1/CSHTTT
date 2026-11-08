@@ -1,0 +1,105 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:household_code",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "household_code",
+  "head_citizen",
+  "head_name",
+  "address",
+  "member_count",
+  "average_income",
+  "poverty_status"
+ ],
+ "fields": [
+  {
+   "fieldname": "household_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Household Code",
+   "unique": 1,
+   "description": "Leave blank to generate automatically.",
+   "read_only_depends_on": "eval:!doc.__islocal"
+  },
+  {
+   "fieldname": "head_citizen",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Head Citizen",
+   "options": "Citizen"
+  },
+  {
+   "description": "Legacy household-head name retained during normalization.",
+   "fieldname": "head_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Head Name (Legacy)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Address"
+  },
+  {
+   "default": "0",
+   "fieldname": "member_count",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Number of Members",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "average_income",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Average Income",
+   "non_negative": 1
+  },
+  {
+   "default": "Normal",
+   "fieldname": "poverty_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Household Classification",
+   "options": "Poor Household\nNear-poor Household\nNormal"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "module": "Social Welfare",
+ "name": "Household",
+ "naming_rule": "By fieldname",
+ "permissions": [
+  {
+   "create": 1,
+   "read": 1,
+   "role": "Social Welfare Officer",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "role": "Social Welfare Reviewer",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "Social Welfare Manager",
+   "write": 1,
+   "import": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "allow_import": 1
+}

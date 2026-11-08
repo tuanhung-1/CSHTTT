@@ -1,0 +1,26 @@
+[
+ {
+  "desk_access": 1,
+  "disabled": 0,
+  "doctype": "Role",
+  "is_custom": 0,
+  "name": "Social Welfare Officer",
+  "role_name": "Social Welfare Officer"
+ },
+ {
+  "desk_access": 1,
+  "disabled": 0,
+  "doctype": "Role",
+  "is_custom": 0,
+  "name": "Social Welfare Reviewer",
+  "role_name": "Social Welfare Reviewer"
+ },
+ {
+  "desk_access": 1,
+  "disabled": 0,
+  "doctype": "Role",
+  "is_custom": 0,
+  "name": "Social Welfare Manager",
+  "role_name": "Social Welfare Manager"
+ }
+]
