@@ -1,0 +1,12 @@
+{
+ "doctype": "Page",
+ "name": "bao-cao-tai-chinh",
+ "page_name": "bao-cao-tai-chinh",
+ "title": "Báo cáo tài chính an sinh",
+ "module": "Social Welfare",
+ "standard": "Yes",
+ "roles": [
+  {"role": "Social Welfare Manager"},
+  {"role": "Social Welfare Finance"}
+ ]
+}

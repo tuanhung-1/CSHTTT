@@ -1,0 +1,27 @@
+{
+ "doctype": "DocType", "name": "Eligibility Result", "module": "Social Welfare", "autoname": "format:RES-{#####}", "naming_rule": "Expression", "track_changes": 1,
+ "field_order": ["ward_overview_section", "ward_flow_panel", "ward_action_panel", "ward_result_details", "ward_verification_history", "result_context_section", "eligibility_run", "beneficiary_type", "household", "citizen", "result_status", "reason_summary", "evaluated_at", "input_snapshot", "rule_details"],
+ "fields": [
+  {"fieldname": "ward_overview_section", "label": "Tổng quan kết quả", "fieldtype": "Section Break"},
+  {"fieldname": "ward_action_panel", "label": "Thao tác xác minh", "fieldtype": "HTML"},
+  {"fieldname": "ward_verification_history", "label": "Lịch sử xác minh", "fieldtype": "HTML"},
+  {"fieldname": "ward_flow_panel", "label": "Tiến độ xét hưởng", "fieldtype": "HTML"},
+  {"fieldname": "result_context_section", "label": "Thông tin gốc của kết quả", "fieldtype": "Section Break", "collapsible": 1},
+  {"fieldname": "eligibility_run", "label": "Lần rà soát", "fieldtype": "Link", "options": "Eligibility Run", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "beneficiary_type", "label": "Loại đối tượng", "fieldtype": "Select", "options": "Household\nCitizen", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "household", "label": "Hộ gia đình", "fieldtype": "Link", "options": "Household", "in_list_view": 1},
+  {"fieldname": "citizen", "label": "Công dân", "fieldtype": "Link", "options": "Citizen", "in_list_view": 1},
+  {"fieldname": "result_status", "label": "Kết quả", "fieldtype": "Select", "options": "ELIGIBLE\nNOT_ELIGIBLE\nNEED_VERIFICATION", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "ward_result_details", "label": "Giải thích kết quả", "fieldtype": "HTML"},
+  {"fieldname": "reason_summary", "label": "Tóm tắt lý do", "fieldtype": "Small Text", "hidden": 1},
+  {"fieldname": "evaluated_at", "label": "Thời điểm đánh giá", "fieldtype": "Datetime", "read_only": 1},
+  {"fieldname": "input_snapshot", "label": "Dữ liệu tại lúc rà soát", "fieldtype": "JSON", "read_only": 1, "hidden": 1},
+  {"fieldname": "rule_details", "label": "Chi tiết điều kiện", "fieldtype": "Table", "options": "Eligibility Rule Detail", "hidden": 1}
+ ],
+ "permissions": [
+  {"role": "Social Welfare Officer", "read": 1, "report": 1},
+  {"role": "Social Welfare Reviewer", "read": 1},
+  {"role": "Social Welfare Manager", "read": 1, "report": 1},
+  {"role": "Social Welfare Finance", "read": 1}
+ ]
+}

@@ -34,6 +34,37 @@ def household_history(household):
 	}
 
 
+@frappe.whitelist()
+def target_group_history(beneficiary_type, name):
+	if beneficiary_type not in ("Household", "Citizen"):
+		frappe.throw("Loại đối tượng không hợp lệ.")
+	frappe.get_doc(beneficiary_type, name).check_permission("read")
+	if not frappe.has_permission("Target Group Assignment", "read"):
+		frappe.throw("Bạn không có quyền xem nhóm đối tượng.", frappe.PermissionError)
+	field = "household" if beneficiary_type == "Household" else "citizen"
+	return frappe.get_list("Target Group Assignment", filters={field: name}, fields=["name", "target_group", "verification_case", "valid_from", "valid_to", "status", "void_reason"], order_by="valid_from desc", limit=100)
+
+
+@frappe.whitelist(methods=["POST"])
+def void_target_group_assignment(name, reason):
+	if not is_admin() and LEADER not in frappe.get_roles():
+		frappe.throw("Chỉ lãnh đạo được hủy hiệu lực nhóm đối tượng.", frappe.PermissionError)
+	if not (reason or "").strip():
+		frappe.throw("Cần nhập lý do hủy hiệu lực.")
+	doc = frappe.get_doc("Target Group Assignment", name)
+	doc.check_permission("read")
+	if doc.status != "ACTIVE":
+		frappe.throw("Bản gán nhóm không còn hiệu lực.")
+	doc.status, doc.void_reason = "VOID", reason.strip()
+	previous = frappe.flags.social_welfare_void_target_group_assignment
+	frappe.flags.social_welfare_void_target_group_assignment = doc.name
+	try:
+		doc.save(ignore_permissions=True)
+	finally:
+		frappe.flags.social_welfare_void_target_group_assignment = previous
+	return doc.name
+
+
 @frappe.whitelist(methods=["POST"])
 def void_classification(name, reason):
 	if not is_admin() and LEADER not in frappe.get_roles():
@@ -97,9 +128,107 @@ def dashboard():
 					),
 				}
 			)
+	role_pages = [
+		(OFFICER, "Công việc cán bộ an sinh", [
+			("Hộ gia đình", "Household", {"is_archived": 0}),
+			("Công dân", "Citizen", {"is_archived": 0}),
+			("Chương trình", "Support Program", {"is_archived": 0}),
+			("Đợt cần hoàn thiện", "Approval Batch", {"status": ["in", ["DRAFT", "RETURNED"]]}),
+			("Hồ sơ chờ xác minh", "Verification Case", {"status": "AWAITING_REVIEW"}),
+		], [
+			("Đợt trình cần hoàn thiện", "Approval Batch", {"status": ["in", ["DRAFT", "RETURNED"]]}),
+		], [
+			("Tiếp nhận hộ gia đình", "Household", "new", {}),
+			("Thêm công dân", "Citizen", "new", {}),
+			("Rà soát chương trình", "Support Program", "list", {}),
+			("Xem các lần rà soát", "Eligibility Run", "list", {}),
+			("Theo dõi hồ sơ xác minh", "Verification Case", "list", {}),
+		]),
+		(VERIFIER, "Hồ sơ được giao xác minh", [
+			("Hộ được giao", "Household", {"is_archived": 0}),
+			("Hồ sơ cần kết luận", "Verification Case", {"status": "AWAITING_REVIEW"}),
+			("Hồ sơ đơn lẻ cần xác minh", "Support Application", {"workflow_state": ["in", ["Submitted", "Reviewing"]]}),
+		], [
+			("Yêu cầu xác minh được giao", "Verification Case", {"status": "AWAITING_REVIEW"}),
+			("Hồ sơ đơn lẻ được giao", "Support Application", {"workflow_state": ["in", ["Submitted", "Reviewing"]]}),
+		], [
+			("Xem yêu cầu xác minh", "Verification Case", "list", {"status": "AWAITING_REVIEW"}),
+			("Xem hộ được giao", "Household", "list", {}),
+			("Xem hồ sơ cần xác minh", "Support Application", "list", {"workflow_state": ["in", ["Submitted", "Reviewing"]]}),
+		]),
+		(LEADER, "Công việc chờ lãnh đạo quyết định", [
+			("Đợt chờ phê duyệt", "Approval Batch", {"status": "SUBMITTED"}),
+			("Chính sách đang soạn", "Policy Version", {"status": "DRAFT"}),
+			("Hồ sơ xác minh đang chờ", "Verification Case", {"status": "AWAITING_REVIEW"}),
+		], [
+			("Đợt trình chờ quyết định", "Approval Batch", {"status": "SUBMITTED"}),
+			("Hồ sơ đơn lẻ chờ duyệt", "Support Application", {"workflow_state": "Pending Approval"}),
+		], [
+			("Xem đợt chờ duyệt", "Approval Batch", "list", {"status": "SUBMITTED"}),
+			("Xem phiên bản chính sách", "Policy Version", "list", {}),
+			("Báo cáo tài chính", "bao-cao-tai-chinh", "page", {}),
+		]),
+		(FINANCE, "Công việc chi trả", [
+			("Khoản đang chờ chi", "Disbursement", {"status": "PENDING"}),
+			("Khoản đã xác nhận chi", "Disbursement", {"status": "PAID"}),
+		], [
+			("Khoản chờ xác nhận chi", "Disbursement", {"status": "PENDING"}),
+			("Hồ sơ đơn lẻ chờ chi", "Support Application", {"workflow_state": "Approved"}),
+		], [
+			("Xem khoản chờ chi", "Disbursement", "list", {"status": "PENDING"}),
+			("Báo cáo tài chính", "bao-cao-tai-chinh", "page", {}),
+		]),
+	]
+	selected_pages = [page for page in role_pages if page[0] in roles]
+	if is_admin():
+		selected_pages = role_pages
+	home_title = selected_pages[0][1] if len(selected_pages) == 1 else "Công việc an sinh xã hội"
+	overview, queues, quick_actions = [], [], []
+	seen_cards, seen_queues, seen_actions = set(), set(), set()
+	for _role, _title, card_defs, queue_defs, action_defs in selected_pages:
+		for label, doctype, filters in card_defs:
+			key = (doctype, label)
+			if key in seen_cards or not frappe.has_permission(doctype, "read"):
+				continue
+			seen_cards.add(key)
+			count = frappe.get_list(doctype, filters=filters, fields=[{"COUNT": "name", "as": "total"}])[0].total
+			overview.append({"label": label, "count": count, "doctype": doctype, "filters": filters})
+		for title, doctype, filters in queue_defs:
+			key = (doctype, title)
+			if key in seen_queues or not frappe.has_permission(doctype, "read"):
+				continue
+			seen_queues.add(key)
+			if doctype == "Approval Batch":
+				fields = ["name", "support_program", "status", "total_beneficiaries"]
+			elif doctype == "Disbursement":
+				fields = ["name", "household", "citizen", "status", "amount"]
+			elif doctype == "Verification Case":
+				fields = ["name", "household", "citizen", "status", "question_type"]
+			else:
+				fields = ["name", "household", "program", "workflow_state"]
+			items = frappe.get_list(doctype, filters=filters, fields=fields, order_by="modified desc", limit=6)
+			queues.append({"title": title, "doctype": doctype, "filters": filters, "items": [
+				{"name": item.name, "status": item.get("status") or item.get("workflow_state"),
+				 "subtitle": item.get("support_program") or item.get("citizen") or item.get("household") or item.get("program") or ""}
+				for item in items
+			]})
+		for label, target, action_type, filters in action_defs:
+			key = (target, action_type, label)
+			if key in seen_actions:
+				continue
+			if action_type == "new" and not frappe.has_permission(target, "create"):
+				continue
+			if action_type == "list" and not frappe.has_permission(target, "read"):
+				continue
+			seen_actions.add(key)
+			quick_actions.append({"label": label, "target": target, "type": action_type, "filters": filters})
 	return {
 		"cards": cards,
 		"tasks": tasks,
 		"roles": list(roles),
 		"can_create": is_admin() or OFFICER in roles,
+		"home_title": home_title,
+		"overview": overview,
+		"queues": queues,
+		"quick_actions": quick_actions,
 	}

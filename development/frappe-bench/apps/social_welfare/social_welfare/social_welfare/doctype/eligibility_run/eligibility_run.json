@@ -1,0 +1,29 @@
+{
+ "doctype": "DocType", "name": "Eligibility Run", "module": "Social Welfare", "autoname": "format:ER-{#####}", "naming_rule": "Expression", "track_changes": 1,
+ "field_order": ["ward_overview_section", "ward_flow_panel", "ward_action_panel", "ward_run_summary", "result_preview", "run_context_section", "support_program", "policy_version", "cutoff_date", "status", "total_count", "eligible_count", "not_eligible_count", "need_verification_count", "started_by", "started_at", "completed_at", "rule_snapshot"],
+ "fields": [
+  {"fieldname": "ward_overview_section", "label": "Tổng quan và kết quả rà soát", "fieldtype": "Section Break"},
+  {"fieldname": "ward_flow_panel", "label": "Tiến độ rà soát", "fieldtype": "HTML"},
+  {"fieldname": "ward_action_panel", "label": "Thao tác rà soát", "fieldtype": "HTML"},
+  {"fieldname": "ward_run_summary", "label": "Tổng hợp kết quả", "fieldtype": "HTML"},
+  {"fieldname": "run_context_section", "label": "Thông tin và dữ liệu gốc của lần rà soát", "fieldtype": "Section Break", "collapsible": 1},
+  {"fieldname": "support_program", "label": "Chương trình hỗ trợ", "fieldtype": "Link", "options": "Support Program", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "policy_version", "label": "Phiên bản chính sách", "fieldtype": "Link", "options": "Policy Version"},
+  {"fieldname": "cutoff_date", "label": "Ngày chốt", "fieldtype": "Date", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "status", "label": "Trạng thái", "fieldtype": "Select", "options": "QUEUED\nRUNNING\nCOMPLETED\nFAILED", "default": "QUEUED", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "total_count", "label": "Tổng đã rà soát", "fieldtype": "Int", "read_only": 1},
+  {"fieldname": "eligible_count", "label": "Đủ điều kiện", "fieldtype": "Int", "read_only": 1},
+  {"fieldname": "not_eligible_count", "label": "Không đủ điều kiện", "fieldtype": "Int", "read_only": 1},
+  {"fieldname": "need_verification_count", "label": "Cần xác minh", "fieldtype": "Int", "read_only": 1},
+  {"fieldname": "started_by", "label": "Người chạy", "fieldtype": "Link", "options": "User", "read_only": 1},
+  {"fieldname": "started_at", "label": "Bắt đầu", "fieldtype": "Datetime", "read_only": 1},
+  {"fieldname": "completed_at", "label": "Hoàn tất", "fieldtype": "Datetime", "read_only": 1},
+  {"fieldname": "rule_snapshot", "label": "Bản sao quy tắc", "fieldtype": "JSON", "read_only": 1, "hidden": 1},
+  {"fieldname": "result_preview", "label": "Danh sách kết quả", "fieldtype": "HTML"}
+ ],
+ "permissions": [
+  {"role": "Social Welfare Officer", "read": 1, "report": 1},
+  {"role": "Social Welfare Manager", "read": 1, "report": 1},
+  {"role": "Social Welfare Finance", "read": 1}
+ ]
+}

@@ -6,7 +6,9 @@
  "engine": "InnoDB",
  "field_order": [
   "application_code",
+  "beneficiary_type",
   "household",
+  "citizen",
   "program",
   "application_date",
   "requested_amount",
@@ -34,6 +36,11 @@
    "description": "Để trống để hệ thống tự tạo mã."
   },
   {
+   "fieldname": "beneficiary_type", "label": "Đối tượng nhận hỗ trợ", "fieldtype": "Select",
+   "options": "Household\nCitizen", "default": "Household", "reqd": 1,
+   "read_only_depends_on": "eval:!['Draft','Returned'].includes(doc.workflow_state)"
+  },
+  {
    "fieldname": "household",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -41,7 +48,13 @@
    "label": "Hộ gia đình",
    "options": "Household",
    "read_only_depends_on": "eval:!['Draft','Returned'].includes(doc.workflow_state)",
-   "reqd": 1
+   "reqd": 1,
+   "description": "Với hồ sơ công dân, chọn hộ mà công dân đang thuộc."
+  },
+  {
+   "fieldname": "citizen", "label": "Công dân nhận hỗ trợ", "fieldtype": "Link",
+   "options": "Citizen", "in_list_view": 1,
+   "read_only_depends_on": "eval:!['Draft','Returned'].includes(doc.workflow_state)"
   },
   {
    "fieldname": "program",

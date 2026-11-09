@@ -24,6 +24,16 @@ def after_migrate():
 		"Support Program",
 		"Support Application",
 		"Household Classification",
+		"Target Group",
+		"Target Group Assignment",
+		"Policy",
+		"Policy Version",
+		"Policy Rule",
+		"Eligibility Run",
+		"Eligibility Result",
+		"Verification Case",
+		"Approval Batch",
+		"Disbursement",
 	):
 		reset_perms(doctype)
 	frappe.clear_cache()
@@ -32,6 +42,8 @@ def after_migrate():
 def after_install():
 	# Frappe marks patches complete on first install rather than executing them.
 	from social_welfare.patches.v0_1.migrate_legacy_classifications import execute
+	from social_welfare.patches.v0_2.backfill_program_beneficiaries import execute as backfill_beneficiaries
 
 	execute()
+	backfill_beneficiaries()
 	after_migrate()

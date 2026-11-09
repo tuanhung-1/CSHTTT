@@ -14,11 +14,18 @@ class Citizen(Document):
 			self.citizen_code = make_autoname("CT-.######", doctype=self.doctype)
 
 	def validate(self):
+		self.validate_pending_verification()
 		self.validate_national_id()
 		self.validate_date_of_birth()
 		self.validate_single_household_head()
 		self.validate_selected_head_household()
 		self.warn_about_possible_duplicates()
+
+	def validate_pending_verification(self):
+		previous = self.get_doc_before_save()
+		if previous and previous.household != self.household and frappe.db.table_exists("Verification Case"):
+			if frappe.db.exists("Verification Case", {"citizen": self.name, "status": "AWAITING_REVIEW"}):
+				frappe.throw("Công dân còn hồ sơ xác minh đang chờ. Kết luận trước khi chuyển sang hộ khác.")
 
 	def after_insert(self):
 		update_member_count(self.household)
@@ -31,12 +38,14 @@ class Citizen(Document):
 			update_member_count(previous.household)
 		if self.relationship == "Head":
 			self.link_first_household_head()
+		if self.relationship == "Head" and frappe.db.get_value("Household", self.household, "head_citizen") == self.name:
+			frappe.db.set_value("Household", self.household, "head_name", self.full_name)
 
 	def link_first_household_head(self):
 		if self.relationship != "Head" or not self.household:
 			return
 		if not frappe.db.get_value("Household", self.household, "head_citizen"):
-			frappe.db.set_value("Household", self.household, "head_citizen", self.name)
+			frappe.db.set_value("Household", self.household, {"head_citizen": self.name, "head_name": self.full_name})
 
 	def after_delete(self):
 		update_member_count(self.household)
@@ -109,6 +118,8 @@ class Citizen(Document):
 		selected_by_household = frappe.db.get_value("Household", {"head_citizen": self.name}, "name")
 		if selected_by_household and selected_by_household != self.household:
 			frappe.throw(_("A selected head citizen cannot be moved to another household."))
+		if selected_by_household and self.relationship != "Head":
+			frappe.throw("Công dân đang được chọn làm chủ hộ không thể đổi quan hệ khỏi Chủ hộ.")
 
 
 def update_member_count(household):

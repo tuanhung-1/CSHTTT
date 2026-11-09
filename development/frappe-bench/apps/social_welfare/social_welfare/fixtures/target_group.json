@@ -1,0 +1,7 @@
+[
+ {"doctype": "Target Group", "name": "MERITORIOUS_PERSON", "group_code": "MERITORIOUS_PERSON", "group_name": "Người có công", "description": "Công dân thuộc diện người có công được xác nhận.", "is_active": 1},
+ {"doctype": "Target Group", "name": "MERITORIOUS_RELATIVE", "group_code": "MERITORIOUS_RELATIVE", "group_name": "Thân nhân người có công", "description": "Thân nhân được công nhận theo hồ sơ chính sách.", "is_active": 1},
+ {"doctype": "Target Group", "name": "SOCIAL_PROTECTION", "group_code": "SOCIAL_PROTECTION", "group_name": "Đối tượng bảo trợ xã hội", "description": "Công dân thuộc nhóm bảo trợ xã hội trong phạm vi quản lý của phường.", "is_active": 1},
+ {"doctype": "Target Group", "name": "DISABILITY", "group_code": "DISABILITY", "group_name": "Người khuyết tật", "description": "Công dân có hồ sơ xác nhận tình trạng khuyết tật.", "is_active": 1},
+ {"doctype": "Target Group", "name": "CHILDREN", "group_code": "CHILDREN", "group_name": "Trẻ em", "description": "Nhóm trẻ em theo tiêu chí của chính sách cụ thể.", "is_active": 1}
+]

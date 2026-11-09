@@ -1,0 +1,12 @@
+{
+ "doctype": "DocType", "name": "Eligibility Rule Detail", "module": "Social Welfare", "istable": 1,
+ "field_order": ["rule_code", "rule_name", "actual_value", "expected_value", "evaluation", "reason"],
+ "fields": [
+  {"fieldname": "rule_code", "label": "Mã điều kiện", "fieldtype": "Data", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "rule_name", "label": "Tên điều kiện", "fieldtype": "Data", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "actual_value", "label": "Giá trị thực tế", "fieldtype": "Small Text"},
+  {"fieldname": "expected_value", "label": "Giá trị yêu cầu", "fieldtype": "Data"},
+  {"fieldname": "evaluation", "label": "Kết quả", "fieldtype": "Select", "options": "PASS\nFAIL\nUNKNOWN", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "reason", "label": "Giải thích", "fieldtype": "Small Text", "in_list_view": 1}
+ ]
+}

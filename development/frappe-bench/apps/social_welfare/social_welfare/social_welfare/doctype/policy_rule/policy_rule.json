@@ -1,0 +1,22 @@
+{
+ "doctype": "DocType", "name": "Policy Rule", "module": "Social Welfare", "autoname": "format:PR-{#####}", "naming_rule": "Expression", "track_changes": 1,
+ "field_order": ["policy_version", "rule_code", "rule_name", "condition_type", "operator", "expected_value", "missing_behavior", "priority", "is_required", "message"],
+ "fields": [
+  {"fieldname": "policy_version", "label": "Phiên bản chính sách", "fieldtype": "Link", "options": "Policy Version", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "rule_code", "label": "Mã điều kiện", "fieldtype": "Data", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "rule_name", "label": "Tên điều kiện", "fieldtype": "Data", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "condition_type", "label": "Loại điều kiện", "fieldtype": "Select", "options": "CLASSIFICATION\nTARGET_GROUP\nRESIDENCY\nDUPLICATE", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "operator", "label": "Phép kiểm tra", "fieldtype": "Select", "options": "EQ\nIN\nEXISTS\nNOT_EXISTS", "reqd": 1},
+  {"fieldname": "expected_value", "label": "Giá trị yêu cầu", "fieldtype": "Data"},
+  {"fieldname": "missing_behavior", "label": "Khi thiếu dữ liệu", "fieldtype": "Select", "options": "NEED_VERIFICATION\nFAIL", "default": "NEED_VERIFICATION", "reqd": 1},
+  {"fieldname": "priority", "label": "Thứ tự kiểm tra", "fieldtype": "Int", "default": "10", "reqd": 1},
+  {"fieldname": "is_required", "label": "Bắt buộc", "fieldtype": "Check", "default": "1"},
+  {"fieldname": "message", "label": "Giải thích", "fieldtype": "Small Text"}
+ ],
+ "permissions": [
+  {"role": "Social Welfare Officer", "read": 1, "report": 1, "create": 1, "write": 1},
+  {"role": "Social Welfare Reviewer", "read": 1},
+  {"role": "Social Welfare Manager", "read": 1, "report": 1},
+  {"role": "Social Welfare Finance", "read": 1}
+ ]
+}

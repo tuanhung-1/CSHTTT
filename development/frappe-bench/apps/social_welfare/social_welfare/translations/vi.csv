@@ -1,6 +1,7 @@
 Social Welfare,An sinh xã hội
 Household,Hộ gia đình
 Citizen,Công dân
+Both,Hộ và công dân
 Household Classification,Lịch sử phân loại
 Support Program,Chương trình hỗ trợ
 Support Application,Hồ sơ hỗ trợ
@@ -37,3 +38,52 @@ Parent,Cha hoặc mẹ
 poor,Hộ nghèo
 near_poor,Hộ cận nghèo
 disaster,Ảnh hưởng thiên tai
+Target Group,Nhóm đối tượng
+Target Group Assignment,Phân nhóm đối tượng
+Policy,Chính sách
+Policy Version,Phiên bản chính sách
+Policy Rule,Quy tắc xét duyệt
+Eligibility Run,Lần rà soát
+Eligibility Result,Kết quả rà soát
+Approval Batch,Đợt trình duyệt
+Disbursement,Khoản chi
+CASH,Hỗ trợ tiền
+IN_KIND,Hỗ trợ hiện vật
+CLASSIFICATION,Phân loại hộ
+TARGET_GROUP,Nhóm đối tượng
+RESIDENCY,Địa bàn cư trú
+DUPLICATE,Khoản hỗ trợ trước đó
+EQ,Bằng
+IN,Thuộc một trong
+EXISTS,Có dữ liệu
+NOT_EXISTS,Không có dữ liệu
+NEED_VERIFICATION,Cần xác minh
+FAIL,Không đạt
+PASS,Đạt
+UNKNOWN,Thiếu dữ liệu
+ELIGIBLE,Đủ điều kiện
+NOT_ELIGIBLE,Không đủ điều kiện
+DRAFT,Bản nháp
+ACTIVE,Đang hiệu lực
+EXPIRED,Hết hiệu lực
+VOID,Đã hủy hiệu lực
+NOT_RUN,Chưa rà soát
+QUEUED,Đang chờ rà soát
+RUNNING,Đang rà soát
+COMPLETED,Đã hoàn tất
+SUBMITTED,Đã trình lãnh đạo
+APPROVED,Đã phê duyệt
+REJECTED,Đã từ chối
+RETURNED,Yêu cầu bổ sung
+SELECTED,Được chọn
+REMOVED,Đã loại khỏi đợt
+PENDING,Chờ chi
+PAID,Đã chi
+FAILED,Thất bại
+CANCELLED,Đã hủy
+Verification Case,Hồ sơ xác minh
+AWAITING_REVIEW,Chờ xác minh
+CONFIRMED,Đã xác nhận
+NOT_CONFIRMED,Không xác nhận
+INSUFFICIENT,Chưa đủ căn cứ
+OTHER,Thông tin khác

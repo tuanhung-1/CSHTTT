@@ -13,7 +13,9 @@
   "relationship",
   "phone",
   "household",
-  "is_archived"
+  "is_archived",
+  "target_group_section",
+  "target_group_history"
  ],
  "fields": [
   {
@@ -86,7 +88,9 @@
    "fieldtype": "Check",
    "default": "0",
    "in_standard_filter": 1
-  }
+  },
+  {"fieldname": "target_group_section", "label": "Nhóm đối tượng chính sách", "fieldtype": "Section Break"},
+  {"fieldname": "target_group_history", "label": "Lịch sử nhóm", "fieldtype": "HTML"}
  ],
  "index_web_pages_for_search": 1,
  "links": [],

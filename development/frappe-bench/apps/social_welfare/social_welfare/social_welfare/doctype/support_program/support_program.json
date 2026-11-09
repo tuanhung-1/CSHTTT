@@ -5,17 +5,40 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "ward_overview_section",
+  "ward_flow_panel",
+  "ward_action_panel",
+  "program_identity_section",
   "code",
   "program_name",
   "description",
+  "program_audience_section",
+  "beneficiary_type",
+  "target_group",
+  "target_group_ref",
+  "program_policy_section",
+  "policy_version",
+  "cutoff_date",
+  "program_support_section",
   "start_date",
   "end_date",
+  "support_type",
   "support_amount",
-  "target_group",
+  "budget_estimate",
+  "program_status_section",
+  "screening_status",
   "active",
   "is_archived"
  ],
  "fields": [
+  {"fieldname": "ward_overview_section", "label": "Tổng quan chương trình", "fieldtype": "Section Break"},
+  {"fieldname": "ward_flow_panel", "label": "Tiến độ chương trình", "fieldtype": "HTML"},
+  {"fieldname": "ward_action_panel", "label": "Thao tác chương trình", "fieldtype": "HTML"},
+  {"fieldname": "program_identity_section", "label": "1. Thông tin chương trình", "fieldtype": "Section Break"},
+  {"fieldname": "program_audience_section", "label": "2. Đối tượng được hỗ trợ", "fieldtype": "Section Break"},
+  {"fieldname": "program_policy_section", "label": "3. Căn cứ rà soát", "fieldtype": "Section Break"},
+  {"fieldname": "program_support_section", "label": "4. Hình thức và nguồn lực", "fieldtype": "Section Break"},
+  {"fieldname": "program_status_section", "label": "5. Tình trạng chương trình", "fieldtype": "Section Break"},
   {
    "fieldname": "code",
    "fieldtype": "Data",
@@ -64,8 +87,34 @@
    "fieldname": "target_group",
    "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Nhóm đối tượng",
+   "label": "Nhóm hộ (tương thích dữ liệu cũ)",
    "options": "\npoor\nnear_poor\ndisaster\npolicy\nother"
+  },
+  {
+   "fieldname": "beneficiary_type", "label": "Đối tượng nhận hỗ trợ", "fieldtype": "Select",
+   "options": "Household\nCitizen", "default": "Household", "reqd": 1, "in_list_view": 1
+  },
+  {
+   "fieldname": "target_group_ref", "label": "Nhóm đối tượng chính sách", "fieldtype": "Link",
+   "options": "Target Group", "description": "Cần chọn cho chương trình hỗ trợ cá nhân."
+  },
+  {
+   "fieldname": "policy_version", "label": "Phiên bản chính sách", "fieldtype": "Link",
+   "options": "Policy Version", "description": "Cần phiên bản ACTIVE, còn hiệu lực để chạy rà soát hàng loạt."
+  },
+  {
+   "fieldname": "cutoff_date", "label": "Ngày chốt xét hưởng", "fieldtype": "Date", "default": "Today"
+  },
+  {
+   "fieldname": "support_type", "label": "Hình thức hỗ trợ", "fieldtype": "Select",
+   "options": "CASH\nIN_KIND", "default": "CASH", "reqd": 1
+  },
+  {
+   "fieldname": "budget_estimate", "label": "Ngân sách dự kiến", "fieldtype": "Currency", "non_negative": 1
+  },
+  {
+   "fieldname": "screening_status", "label": "Trạng thái rà soát", "fieldtype": "Select",
+   "options": "NOT_RUN\nRUNNING\nCOMPLETED\nFAILED", "default": "NOT_RUN", "read_only": 1, "in_list_view": 1
   },
   {
    "default": "1",

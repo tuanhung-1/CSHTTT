@@ -28,3 +28,87 @@ body:is(
     flex: 1 1 100%;
     min-width: 0;
 }
+.ward-inline-actions{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin:8px 0 22px;padding:18px 20px;background:linear-gradient(110deg,#eef7f4,#f7fafc);border:1px solid #cfe5df;border-radius:14px}
+.ward-inline-actions-copy{display:flex;flex-direction:column;gap:4px;min-width:180px}
+.ward-inline-actions-copy strong{font-size:14px;color:#174e48}
+.ward-inline-actions-copy span{font-size:12px;color:#5a716d;line-height:1.5}
+.ward-inline-actions-buttons{display:flex;align-items:center;flex-wrap:wrap;gap:9px}
+.ward-inline-actions-buttons .btn{min-height:36px;font-weight:600}
+.ward-result-explanation{margin:6px 0 20px;padding:18px;background:#f7fbfa;border:1px solid #d7e8e2;border-radius:12px}
+.ward-result-explanation>strong{font-size:17px;color:#154f47}
+.ward-result-explanation>p{margin:6px 0 16px;color:#526c65}
+@media(max-width:640px){.ward-inline-actions{align-items:stretch}.ward-inline-actions-buttons{width:100%}.ward-inline-actions-buttons .btn{flex:1 1 160px}}
+
+/* Shared journey and review surfaces for the program, screening, and approval forms. */
+.ward-journey{margin:4px 0 18px;padding:22px 24px 18px;border:1px solid #d7e8e2;border-radius:16px;background:linear-gradient(125deg,#f1faf7 0%,#fff 65%);box-shadow:0 5px 20px rgba(23,78,72,.04)}
+.ward-journey-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}
+.ward-journey-eyebrow{display:block;margin-bottom:6px;color:#328271;font-size:11px;font-weight:750;letter-spacing:.08em}
+.ward-journey h2{margin:0;color:#173f3b;font-size:21px;line-height:1.3}
+.ward-journey-head p{margin:8px 0 0;color:#526c65;line-height:1.55}
+.ward-journey-stage{flex-shrink:0;padding:7px 11px;border-radius:30px;background:#dff1e9;color:#17634e;font-weight:700;font-size:12px}
+.ward-journey-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:22px 0 0;padding:0;list-style:none}
+.ward-journey-steps li{display:flex;align-items:center;gap:9px;min-width:0;padding:10px 8px 10px 0;border-top:3px solid #e5ece9;color:#81908a;font-size:12px;font-weight:650}
+.ward-journey-steps li.is-done{border-color:#62b79c;color:#356e5b}
+.ward-journey-steps li.is-current{border-color:#1c8067;color:#145b48}
+.ward-journey-number{display:grid;place-items:center;flex:0 0 23px;height:23px;border-radius:50%;background:#edf2ef;color:inherit;font-weight:750}
+.ward-journey-steps .is-done .ward-journey-number{background:#d7f0e4}
+.ward-journey-steps .is-current .ward-journey-number{background:#1c8067;color:#fff}
+.ward-journey-meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:13px;padding-top:13px;border-top:1px solid #dcece6;color:#4c6660;font-size:12px}
+.ward-journey-meta strong{margin-right:4px;color:#214e45}
+.ward-related{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:0 0 22px;padding:14px 16px;border:1px solid #e0e9e5;border-radius:12px;background:#fff}
+.ward-related>div{display:flex;flex-direction:column;gap:2px;margin-right:auto}
+.ward-related>div strong{color:#254e43;font-size:13px}
+.ward-related>div span,.ward-related-empty{color:#71877f;font-size:12px}
+.ward-related .btn{white-space:normal;text-align:left}
+.ward-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:4px 0 15px}
+.ward-summary-grid-three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.ward-metric{min-width:0;padding:15px 16px;border:1px solid #e0e9e5;border-radius:12px;background:#fff}
+.ward-metric span{display:block;color:#60776f;font-size:12px}
+.ward-metric strong{display:block;margin-top:4px;color:#234a40;font-size:23px;line-height:1.2}
+.ward-metric.ward-tone-positive{background:#f2faf5;border-color:#d7ebdc}
+.ward-metric.ward-tone-warning{background:#fff9ed;border-color:#f2e6c8}
+.ward-metric.ward-tone-negative{background:#fff5f2;border-color:#f1ded8}
+.ward-help-note{margin:8px 0 20px;color:#61776f;font-size:12px;line-height:1.55}
+.ward-help-warning{padding:10px 12px;border-radius:8px;background:#fff5e8;color:#855d23}
+.ward-results{margin:3px 0 25px;border:1px solid #e0e9e5;border-radius:14px;background:#fff;overflow:hidden}
+.ward-results-head{display:flex;align-items:end;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:19px 19px 13px}
+.ward-results-head h3,.ward-result-table-title h4{margin:0;color:#254e43;font-size:16px}
+.ward-results-head p,.ward-result-table-title p{margin:4px 0 0;color:#71877f;font-size:12px}
+.ward-search-label{display:flex;flex-direction:column;gap:5px;min-width:220px;color:#58716a;font-size:11px;font-weight:600}
+.ward-filter-tabs{display:flex;gap:6px;flex-wrap:wrap;padding:0 19px 15px}
+.ward-filter-tab{border:1px solid #deeae3;border-radius:8px;background:#f7faf8;color:#496359;padding:7px 10px;font-size:12px}
+.ward-filter-tab.is-active{border-color:#1c8067;background:#e5f4ec;color:#145b48}
+.ward-filter-tab strong{margin-left:4px}
+.ward-results-table{margin-bottom:0}
+.ward-results-table thead th{background:#f6faf8;color:#547168;font-size:11px;font-weight:700;white-space:nowrap}
+.ward-results-table tbody td{vertical-align:middle;color:#355349;font-size:12px;line-height:1.45}
+.ward-results-table td strong{display:block;font-size:12px}
+.ward-results-table td small{display:block;margin-top:3px;color:#7c9189}
+.ward-results-table input[type=checkbox]{width:16px;height:16px;accent-color:#1c8067}
+.ward-results-table .btn{white-space:nowrap}
+.ward-results-footer{padding:12px 19px;border-top:1px solid #e8efeb;color:#70867d;font-size:11px}
+.ward-results-empty{padding:24px;text-align:center}
+.ward-status{display:inline-flex;align-items:center;padding:5px 9px;border-radius:20px;background:#eef2f0;color:#526d61;font-size:11px;font-weight:700;white-space:nowrap}
+.ward-status.ward-tone-positive{background:#dcf3e5;color:#176641}
+.ward-status.ward-tone-warning{background:#fff1d8;color:#865f19}
+.ward-status.ward-tone-negative{background:#fbe6e1;color:#9a4034}
+.ward-result-explanation{padding:0;overflow:hidden}
+.ward-result-head{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:20px 20px 8px}
+.ward-result-head h3{margin:0;color:#254e43;font-size:18px}
+.ward-result-reason{margin:0;padding:4px 20px 15px;color:#3c5d51;line-height:1.55}
+.ward-result-hint{margin:0 20px 19px;padding:12px 14px;border-left:3px solid #3c9b79;border-radius:6px;background:#ecf7f1;color:#345d4c;font-size:12px;line-height:1.5}
+.ward-result-table-title{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px 13px}
+.ward-result-table-title>span{color:#6d847b;font-size:12px;white-space:nowrap}
+.ward-result-explanation>.ward-related{margin:16px 20px 20px}
+.ward-decision-note{margin:10px 0 16px;padding:14px 16px;border-left:3px solid #1c8067;border-radius:8px;background:#f0f8f3;color:#315d4c}
+.ward-decision-note strong{font-size:12px}
+.ward-decision-note p{margin:6px 0 0;white-space:pre-wrap;font-size:12px;line-height:1.5}
+@media(max-width:760px){.ward-journey{padding:17px}.ward-journey-head{flex-direction:column}.ward-journey-steps{grid-template-columns:repeat(5,minmax(95px,1fr));overflow-x:auto}.ward-journey-steps li{align-items:flex-start;flex-direction:column}.ward-summary-grid,.ward-summary-grid-three{grid-template-columns:repeat(2,minmax(0,1fr))}.ward-results-head{align-items:stretch}.ward-search-label{width:100%}}
+@media(max-width:440px){.ward-summary-grid,.ward-summary-grid-three{grid-template-columns:1fr}.ward-result-head{align-items:flex-start;flex-direction:column}}
+.ward-target-actions{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.ward-verification-summary{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:4px 0 14px;padding:19px 21px;border:1px solid #d7e8e2;border-radius:14px;background:linear-gradient(115deg,#f0f9f5,#fff)}
+.ward-verification-summary h2{margin:0;color:#1b5142;font-size:20px}
+.ward-verification-summary p{margin:6px 0 0;color:#637a70;font-size:12px}
+.ward-verification-history{margin:16px 0 24px;padding:18px;border:1px solid #dce9e2;border-radius:12px;background:#fff}
+.ward-verification-history h4{margin:0 0 12px;color:#244d41;font-size:15px}
+@media(max-width:600px){.ward-verification-summary{align-items:flex-start;flex-direction:column}}

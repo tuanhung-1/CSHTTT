@@ -23,11 +23,26 @@ class SupportApplication(Document):
 			frappe.throw(_("New applications must start in Draft."))
 
 	def validate(self):
+		self.validate_beneficiary()
 		self.validate_amounts()
 		self.validate_household_program_uniqueness()
 		self.validate_target_group()
 		self.validate_role_fields()
 		self.validate_transition()
+
+	def validate_beneficiary(self):
+		if self.beneficiary_type not in {"Household", "Citizen"}:
+			frappe.throw("Chọn loại đối tượng nhận hỗ trợ.")
+		program_type = frappe.db.get_value("Support Program", self.program, "beneficiary_type") if self.program else None
+		if program_type and program_type != self.beneficiary_type:
+			frappe.throw("Loại đối tượng của hồ sơ phải khớp chương trình.")
+		if self.beneficiary_type == "Citizen":
+			if not self.citizen:
+				frappe.throw("Hồ sơ cá nhân cần chọn công dân.")
+			if self.household != frappe.db.get_value("Citizen", self.citizen, "household"):
+				frappe.throw("Hộ gia đình phải khớp hộ của công dân.")
+		elif self.citizen:
+			frappe.throw("Hồ sơ hộ gia đình không chọn công dân nhận hỗ trợ.")
 
 	def validate_amounts(self):
 		if flt(self.requested_amount) < 0:
@@ -36,13 +51,10 @@ class SupportApplication(Document):
 			frappe.throw(_("Approved amount must be greater than or equal to zero."))
 
 	def validate_household_program_uniqueness(self):
-		filters = {
-			"household": self.household,
-			"program": self.program,
-			"name": ["!=", self.name],
-		}
+		filters = {"program": self.program, "beneficiary_type": self.beneficiary_type, "name": ["!=", self.name]}
+		filters["citizen" if self.beneficiary_type == "Citizen" else "household"] = self.citizen if self.beneficiary_type == "Citizen" else self.household
 		if frappe.db.exists("Support Application", filters):
-			frappe.throw(_("A household can have only one application for the same program."))
+			frappe.throw(_("An applicant can have only one application for the same program."))
 
 	def validate_target_group(self):
 		if not self.household or not self.program:
@@ -60,6 +72,13 @@ class SupportApplication(Document):
 			frappe.throw(
 				"Hộ chưa có phân loại phù hợp và còn hiệu lực tại ngày hồ sơ. Hãy kiểm tra Lịch sử phân loại."
 			)
+		if self.beneficiary_type == "Citizen":
+			group = frappe.db.get_value("Support Program", self.program, "target_group_ref")
+			if group and not frappe.db.exists("Target Group Assignment", {
+				"citizen": self.citizen, "target_group": group, "status": "ACTIVE",
+				"valid_from": ["<=", self.application_date], "valid_to": [">=", self.application_date],
+			}):
+				frappe.throw("Công dân chưa có nhóm đối tượng phù hợp tại ngày hồ sơ.")
 
 	def validate_role_fields(self):
 		if is_admin():
@@ -70,7 +89,7 @@ class SupportApplication(Document):
 		allowed = set()
 		if OFFICER in roles and state in {"Draft", "Returned"}:
 			allowed.update(
-				{"application_code", "household", "program", "application_date", "requested_amount", "reason"}
+				{"application_code", "beneficiary_type", "household", "citizen", "program", "application_date", "requested_amount", "reason"}
 			)
 		if VERIFIER in roles and state in {"Submitted", "Reviewing"}:
 			allowed.add("verification_note")
@@ -80,7 +99,9 @@ class SupportApplication(Document):
 			allowed.add("payment_note")
 		for field in (
 			"application_code",
+			"beneficiary_type",
 			"household",
+			"citizen",
 			"program",
 			"application_date",
 			"requested_amount",

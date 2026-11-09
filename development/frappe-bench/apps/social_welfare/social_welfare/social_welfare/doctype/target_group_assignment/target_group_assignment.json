@@ -1,0 +1,21 @@
+{
+ "doctype": "DocType", "name": "Target Group Assignment", "module": "Social Welfare", "autoname": "format:TGA-{#####}", "naming_rule": "Expression", "track_changes": 1,
+ "field_order": ["target_group", "citizen", "household", "verification_case", "valid_from", "valid_to", "evidence", "status", "void_reason"],
+ "fields": [
+  {"fieldname": "target_group", "label": "Nhóm đối tượng", "fieldtype": "Link", "options": "Target Group", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "citizen", "label": "Công dân", "fieldtype": "Link", "options": "Citizen", "in_list_view": 1},
+  {"fieldname": "household", "label": "Hộ gia đình", "fieldtype": "Link", "options": "Household", "in_list_view": 1},
+  {"fieldname": "verification_case", "label": "Hồ sơ xác minh", "fieldtype": "Link", "options": "Verification Case", "description": "Bắt buộc với bản gán nhóm mới; bản lịch sử cũ vẫn được giữ nguyên."},
+  {"fieldname": "valid_from", "label": "Hiệu lực từ", "fieldtype": "Date", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "valid_to", "label": "Hiệu lực đến", "fieldtype": "Date", "reqd": 1},
+  {"fieldname": "evidence", "label": "Tệp minh chứng", "fieldtype": "Attach"},
+  {"fieldname": "status", "label": "Trạng thái", "fieldtype": "Select", "options": "ACTIVE\nVOID", "default": "ACTIVE", "read_only": 1, "in_list_view": 1},
+  {"fieldname": "void_reason", "label": "Lý do hủy hiệu lực", "fieldtype": "Small Text", "read_only": 1}
+ ],
+ "permissions": [
+  {"role": "Social Welfare Officer", "read": 1, "report": 1, "create": 1, "write": 1},
+  {"role": "Social Welfare Reviewer", "read": 1},
+  {"role": "Social Welfare Manager", "read": 1, "report": 1},
+  {"role": "Social Welfare Finance", "read": 0}
+ ]
+}

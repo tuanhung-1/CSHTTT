@@ -1,0 +1,37 @@
+{
+ "doctype": "DocType", "name": "Verification Case", "module": "Social Welfare", "autoname": "format:VC-{#####}", "naming_rule": "Expression", "track_changes": 1, "allow_rename": 0,
+ "field_order": ["overview_section", "ward_case_summary", "ward_action_panel", "status", "request_section", "eligibility_result", "beneficiary_type", "household", "citizen", "question_type", "target_group", "fact_date", "request_note", "assigned_reviewer", "requested_by", "requested_at", "conclusion_section", "conclusion", "verified_value", "verified_from", "verified_to", "finding", "basis", "evidence_file", "completed_by", "completed_at"],
+ "fields": [
+  {"fieldname": "overview_section", "label": "Hồ sơ xác minh", "fieldtype": "Section Break"},
+  {"fieldname": "ward_case_summary", "label": "Tóm tắt xác minh", "fieldtype": "HTML"},
+  {"fieldname": "ward_action_panel", "label": "Thao tác xác minh", "fieldtype": "HTML"},
+  {"fieldname": "status", "label": "Trạng thái", "fieldtype": "Select", "options": "AWAITING_REVIEW\nCOMPLETED", "default": "AWAITING_REVIEW", "read_only": 1, "in_list_view": 1},
+  {"fieldname": "request_section", "label": "Nội dung được yêu cầu xác minh", "fieldtype": "Section Break"},
+  {"fieldname": "eligibility_result", "label": "Kết quả rà soát gốc", "fieldtype": "Link", "options": "Eligibility Result", "read_only": 1},
+  {"fieldname": "beneficiary_type", "label": "Loại đối tượng", "fieldtype": "Select", "options": "Household\nCitizen", "read_only": 1, "reqd": 1},
+  {"fieldname": "household", "label": "Hộ gia đình", "fieldtype": "Link", "options": "Household", "read_only": 1, "in_list_view": 1},
+  {"fieldname": "citizen", "label": "Công dân", "fieldtype": "Link", "options": "Citizen", "read_only": 1, "in_list_view": 1},
+  {"fieldname": "question_type", "label": "Nội dung xác minh", "fieldtype": "Select", "options": "TARGET_GROUP\nRESIDENCY\nCLASSIFICATION\nOTHER", "read_only": 1, "reqd": 1, "in_list_view": 1},
+  {"fieldname": "target_group", "label": "Nhóm đối tượng cần xác minh", "fieldtype": "Link", "options": "Target Group", "read_only": 1},
+  {"fieldname": "fact_date", "label": "Ngày dữ liệu cần xác minh", "fieldtype": "Date", "read_only": 1, "reqd": 1},
+  {"fieldname": "request_note", "label": "Lý do và yêu cầu xác minh", "fieldtype": "Small Text", "read_only": 1, "reqd": 1},
+  {"fieldname": "assigned_reviewer", "label": "Người được giao xác minh", "fieldtype": "Link", "options": "User", "read_only": 1, "reqd": 1, "in_list_view": 1},
+  {"fieldname": "requested_by", "label": "Cán bộ yêu cầu", "fieldtype": "Link", "options": "User", "read_only": 1},
+  {"fieldname": "requested_at", "label": "Thời điểm yêu cầu", "fieldtype": "Datetime", "read_only": 1},
+  {"fieldname": "conclusion_section", "label": "Kết luận và căn cứ", "fieldtype": "Section Break"},
+  {"fieldname": "conclusion", "label": "Kết luận", "fieldtype": "Select", "options": "CONFIRMED\nNOT_CONFIRMED\nINSUFFICIENT", "read_only": 1, "in_list_view": 1},
+  {"fieldname": "verified_value", "label": "Giá trị đã xác minh", "fieldtype": "Data", "read_only": 1},
+  {"fieldname": "verified_from", "label": "Nhóm được xác minh từ", "fieldtype": "Date", "read_only": 1},
+  {"fieldname": "verified_to", "label": "Nhóm được xác minh đến", "fieldtype": "Date", "read_only": 1},
+  {"fieldname": "finding", "label": "Nội dung kết luận", "fieldtype": "Small Text", "read_only": 1},
+  {"fieldname": "basis", "label": "Căn cứ xác minh", "fieldtype": "Small Text", "read_only": 1},
+  {"fieldname": "evidence_file", "label": "Tệp minh chứng (nếu có)", "fieldtype": "Attach", "read_only": 1},
+  {"fieldname": "completed_by", "label": "Người kết luận", "fieldtype": "Link", "options": "User", "read_only": 1},
+  {"fieldname": "completed_at", "label": "Thời điểm kết luận", "fieldtype": "Datetime", "read_only": 1}
+ ],
+ "permissions": [
+  {"role": "Social Welfare Officer", "read": 1, "report": 1},
+  {"role": "Social Welfare Reviewer", "read": 1, "report": 1},
+  {"role": "Social Welfare Manager", "read": 1, "report": 1}
+ ]
+}

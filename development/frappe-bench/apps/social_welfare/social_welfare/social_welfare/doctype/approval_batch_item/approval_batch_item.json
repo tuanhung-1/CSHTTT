@@ -1,0 +1,18 @@
+{
+ "doctype": "DocType", "name": "Approval Batch Item", "module": "Social Welfare", "istable": 1,
+ "field_order": ["beneficiary_type", "household", "citizen", "eligibility_result", "proposed_amount", "item_description", "quantity", "remarks", "selection_status", "change_reason", "modified_by_user", "modified_at"],
+ "fields": [
+  {"fieldname": "beneficiary_type", "label": "Loại đối tượng", "fieldtype": "Select", "options": "Household\nCitizen", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "household", "label": "Hộ gia đình", "fieldtype": "Link", "options": "Household", "in_list_view": 1},
+  {"fieldname": "citizen", "label": "Công dân", "fieldtype": "Link", "options": "Citizen", "in_list_view": 1},
+  {"fieldname": "eligibility_result", "label": "Kết quả rà soát", "fieldtype": "Link", "options": "Eligibility Result", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "proposed_amount", "label": "Số tiền đề xuất", "fieldtype": "Currency", "in_list_view": 1},
+  {"fieldname": "item_description", "label": "Hiện vật đề xuất", "fieldtype": "Data"},
+  {"fieldname": "quantity", "label": "Số lượng", "fieldtype": "Float"},
+  {"fieldname": "remarks", "label": "Ghi chú", "fieldtype": "Small Text"},
+  {"fieldname": "selection_status", "label": "Chọn/loại", "fieldtype": "Select", "options": "SELECTED\nREMOVED", "default": "SELECTED", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "change_reason", "label": "Lý do thay đổi", "fieldtype": "Small Text"},
+  {"fieldname": "modified_by_user", "label": "Người sửa gần nhất", "fieldtype": "Link", "options": "User", "read_only": 1},
+  {"fieldname": "modified_at", "label": "Thời điểm sửa", "fieldtype": "Datetime", "read_only": 1}
+ ]
+}

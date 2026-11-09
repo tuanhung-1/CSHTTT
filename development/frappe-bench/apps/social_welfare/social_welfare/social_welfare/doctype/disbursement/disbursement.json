@@ -1,0 +1,27 @@
+{
+ "doctype": "DocType", "name": "Disbursement", "module": "Social Welfare", "autoname": "format:DIS-{#####}", "naming_rule": "Expression", "track_changes": 1,
+ "field_order": ["ward_action_panel", "approval_batch", "eligibility_result", "beneficiary_type", "household", "citizen", "support_type", "amount", "item_description", "quantity", "status", "paid_on", "confirmed_by", "payment_note", "receipt_file"],
+ "fields": [
+  {"fieldname": "ward_action_panel", "label": "Thao tác chi trả", "fieldtype": "HTML"},
+  {"fieldname": "approval_batch", "label": "Đợt phê duyệt", "fieldtype": "Link", "options": "Approval Batch", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "eligibility_result", "label": "Kết quả rà soát", "fieldtype": "Link", "options": "Eligibility Result", "reqd": 1},
+  {"fieldname": "beneficiary_type", "label": "Loại đối tượng", "fieldtype": "Select", "options": "Household\nCitizen", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "household", "label": "Hộ gia đình", "fieldtype": "Link", "options": "Household", "in_list_view": 1},
+  {"fieldname": "citizen", "label": "Công dân", "fieldtype": "Link", "options": "Citizen", "in_list_view": 1},
+  {"fieldname": "support_type", "label": "Loại hỗ trợ", "fieldtype": "Select", "options": "CASH\nIN_KIND", "reqd": 1},
+  {"fieldname": "amount", "label": "Số tiền", "fieldtype": "Currency", "in_list_view": 1},
+  {"fieldname": "item_description", "label": "Hiện vật", "fieldtype": "Data"},
+  {"fieldname": "quantity", "label": "Số lượng", "fieldtype": "Float"},
+  {"fieldname": "status", "label": "Trạng thái", "fieldtype": "Select", "options": "PENDING\nPAID\nFAILED\nCANCELLED", "default": "PENDING", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "paid_on", "label": "Thời điểm chi trả", "fieldtype": "Datetime", "read_only": 1},
+  {"fieldname": "confirmed_by", "label": "Người xác nhận", "fieldtype": "Link", "options": "User", "read_only": 1},
+  {"fieldname": "payment_note", "label": "Ghi chú chi trả", "fieldtype": "Small Text", "read_only": 1},
+  {"fieldname": "receipt_file", "label": "Tệp biên nhận", "fieldtype": "Attach", "read_only": 1}
+ ],
+ "permissions": [
+  {"role": "Social Welfare Officer", "read": 1, "report": 1},
+  {"role": "Social Welfare Reviewer", "read": 1},
+  {"role": "Social Welfare Manager", "read": 1, "report": 1},
+  {"role": "Social Welfare Finance", "read": 1, "report": 1}
+ ]
+}

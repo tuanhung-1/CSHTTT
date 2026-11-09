@@ -1,5 +1,6 @@
 frappe.ui.form.on("Citizen", {
 	refresh(frm) {
+		window.wardTargets?.render(frm, "Citizen");
 		if (frm.is_new()) {
 			frm.set_intro("Tạo và lưu Hộ gia đình trước, sau đó thêm công dân vào hộ. Nếu đây là công dân đầu tiên và là chủ hộ, chọn quan hệ Chủ hộ.", "blue");
 			if (frappe.model.can_create("Household")) {

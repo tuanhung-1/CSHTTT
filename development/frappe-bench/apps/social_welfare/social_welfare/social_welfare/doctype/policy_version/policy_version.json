@@ -1,0 +1,21 @@
+{
+ "doctype": "DocType", "name": "Policy Version", "module": "Social Welfare", "autoname": "format:PV-{#####}", "naming_rule": "Expression", "track_changes": 1,
+ "field_order": ["policy", "version_number", "effective_from", "effective_to", "legal_reference", "document_file", "status", "approved_by", "approved_on"],
+ "fields": [
+  {"fieldname": "policy", "label": "Chính sách", "fieldtype": "Link", "options": "Policy", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "version_number", "label": "Số phiên bản", "fieldtype": "Data", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "effective_from", "label": "Hiệu lực từ", "fieldtype": "Date", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "effective_to", "label": "Hiệu lực đến", "fieldtype": "Date"},
+  {"fieldname": "legal_reference", "label": "Căn cứ pháp lý", "fieldtype": "Data", "reqd": 1},
+  {"fieldname": "document_file", "label": "Văn bản chính sách", "fieldtype": "Attach"},
+  {"fieldname": "status", "label": "Trạng thái", "fieldtype": "Select", "options": "DRAFT\nACTIVE\nEXPIRED", "default": "DRAFT", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "approved_by", "label": "Người phê duyệt", "fieldtype": "Link", "options": "User", "read_only": 1},
+  {"fieldname": "approved_on", "label": "Thời điểm phê duyệt", "fieldtype": "Datetime", "read_only": 1}
+ ],
+ "permissions": [
+  {"role": "Social Welfare Officer", "read": 1, "report": 1, "create": 1, "write": 1},
+  {"role": "Social Welfare Reviewer", "read": 1},
+  {"role": "Social Welfare Manager", "read": 1, "report": 1, "write": 1},
+  {"role": "Social Welfare Finance", "read": 1}
+ ]
+}

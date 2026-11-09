@@ -1,0 +1,29 @@
+{
+ "doctype": "DocType", "name": "Approval Batch", "module": "Social Welfare", "autoname": "format:AB-{#####}", "naming_rule": "Expression", "track_changes": 1,
+ "field_order": ["ward_overview_section", "ward_flow_panel", "ward_action_panel", "ward_batch_summary", "batch_items_section", "items", "batch_details_section", "support_program", "eligibility_run", "status", "total_beneficiaries", "total_amount", "submitted_by", "submitted_at", "decided_by", "decided_at", "decision_note"],
+ "fields": [
+  {"fieldname": "ward_overview_section", "label": "Tổng quan đợt trình", "fieldtype": "Section Break"},
+  {"fieldname": "ward_flow_panel", "label": "Tiến độ đợt trình", "fieldtype": "HTML"},
+  {"fieldname": "ward_action_panel", "label": "Thao tác đợt trình", "fieldtype": "HTML"},
+  {"fieldname": "ward_batch_summary", "label": "Tóm tắt đề xuất", "fieldtype": "HTML"},
+  {"fieldname": "batch_items_section", "label": "Danh sách đề xuất", "fieldtype": "Section Break"},
+  {"fieldname": "batch_details_section", "label": "Thông tin trình và quyết định", "fieldtype": "Section Break", "collapsible": 1},
+  {"fieldname": "support_program", "label": "Chương trình hỗ trợ", "fieldtype": "Link", "options": "Support Program", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "eligibility_run", "label": "Lần rà soát", "fieldtype": "Link", "options": "Eligibility Run", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "status", "label": "Trạng thái", "fieldtype": "Select", "options": "DRAFT\nSUBMITTED\nAPPROVED\nREJECTED\nRETURNED", "default": "DRAFT", "reqd": 1, "in_list_view": 1, "read_only": 1},
+  {"fieldname": "total_beneficiaries", "label": "Số đối tượng đề xuất", "fieldtype": "Int", "read_only": 1},
+  {"fieldname": "total_amount", "label": "Tổng kinh phí đề xuất", "fieldtype": "Currency", "read_only": 1},
+  {"fieldname": "submitted_by", "label": "Cán bộ trình", "fieldtype": "Link", "options": "User", "read_only": 1},
+  {"fieldname": "submitted_at", "label": "Thời điểm trình", "fieldtype": "Datetime", "read_only": 1},
+  {"fieldname": "decided_by", "label": "Người quyết định", "fieldtype": "Link", "options": "User", "read_only": 1},
+  {"fieldname": "decided_at", "label": "Thời điểm quyết định", "fieldtype": "Datetime", "read_only": 1},
+  {"fieldname": "decision_note", "label": "Ý kiến quyết định", "fieldtype": "Text", "read_only": 1},
+  {"fieldname": "items", "label": "Danh sách đối tượng", "fieldtype": "Table", "options": "Approval Batch Item", "reqd": 1}
+ ],
+ "permissions": [
+  {"role": "Social Welfare Officer", "read": 1, "report": 1, "write": 1},
+  {"role": "Social Welfare Reviewer", "read": 1},
+  {"role": "Social Welfare Manager", "read": 1, "report": 1},
+  {"role": "Social Welfare Finance", "read": 1, "report": 1}
+ ]
+}

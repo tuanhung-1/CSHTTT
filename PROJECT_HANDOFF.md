@@ -4,6 +4,8 @@ Cập nhật: **08/11/2026**, múi giờ Việt Nam.
 
 Hướng dẫn cập nhật giữa hai máy: [CODE_FIRST.md](CODE_FIRST.md).
 
+Kịch bản nhập dữ liệu, demo và kiểm thử xuyên suốt hiện tại: [HUONG_DAN_DEMO_VA_TEST_TOAN_BO.md](HUONG_DAN_DEMO_VA_TEST_TOAN_BO.md).
+
 Dự án chỉ dùng **ERPNext/Frappe + MariaDB**. Các mục Odoo/PostgreSQL trong tài liệu nghiên cứu cũ không phải kiến trúc triển khai của app này.
 
 ## 1. Source và Git

@@ -21,6 +21,14 @@ class Household(Document):
 
 	def validate_assignment_and_legacy(self):
 		previous = self.get_doc_before_save()
+		if previous and self.assigned_verifier != previous.assigned_verifier and frappe.db.table_exists("Verification Case"):
+			pending = frappe.db.sql(
+				"SELECT v.name FROM `tabVerification Case` v LEFT JOIN `tabCitizen` c ON c.name=v.citizen "
+				"WHERE v.status='AWAITING_REVIEW' AND (v.household=%s OR c.household=%s) LIMIT 1",
+				(self.name, self.name),
+			)
+			if pending:
+				frappe.throw("Hộ còn hồ sơ xác minh đang chờ. Kết luận hồ sơ trước khi đổi người được giao.")
 		if (previous and self.poverty_status != previous.poverty_status) or (
 			self.is_new() and self.poverty_status
 		):
@@ -45,9 +53,12 @@ class Household(Document):
 		if not self.head_citizen:
 			return
 
-		citizen_household = frappe.db.get_value("Citizen", self.head_citizen, "household")
-		if citizen_household != self.name:
+		citizen = frappe.db.get_value("Citizen", self.head_citizen, ["household", "full_name", "relationship"], as_dict=True)
+		if not citizen or citizen.household != self.name:
 			frappe.throw(_("The head citizen must be a member of this household."))
+		if citizen.relationship != "Head":
+			frappe.throw("Công dân được chọn làm chủ hộ phải có quan hệ Chủ hộ.")
+		self.head_name = citizen.full_name
 
 	def set_member_count(self):
 		self.member_count = frappe.db.count("Citizen", {"household": self.name}) if not self.is_new() else 0

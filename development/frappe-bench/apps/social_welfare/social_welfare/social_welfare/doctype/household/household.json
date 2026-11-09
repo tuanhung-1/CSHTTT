@@ -5,6 +5,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "ward_action_panel",
   "identity_section",
   "household_code",
   "head_name",
@@ -20,9 +21,12 @@
   "assigned_verifier",
   "poverty_status",
   "classification_section",
-  "classification_history"
+  "classification_history",
+  "target_group_section",
+  "target_group_history"
  ],
  "fields": [
+  {"fieldname": "ward_action_panel", "label": "Thao tác hộ gia đình", "fieldtype": "HTML"},
   {
    "fieldname": "household_code",
    "fieldtype": "Data",
@@ -93,7 +97,7 @@
    "label": "Người được giao xác minh",
    "fieldtype": "Link",
    "options": "User",
-   "description": "Chỉ người có vai trò Người xác minh. Người này chỉ được xem các hộ được giao."
+   "description": "Chọn tài khoản có vai trò Người xác minh. Người này xem hồ sơ được giao và ghi kết luận xác minh; không sửa dữ liệu hộ."
   },
   {
    "fieldname": "is_archived",
@@ -112,6 +116,8 @@
    "label": "Lịch sử",
    "fieldtype": "HTML"
   },
+  {"fieldname": "target_group_section", "label": "Nhóm đối tượng chính sách của hộ", "fieldtype": "Section Break"},
+  {"fieldname": "target_group_history", "label": "Lịch sử nhóm", "fieldtype": "HTML"},
   {
    "fieldname": "identity_section",
    "label": "Thông tin hộ gia đình",

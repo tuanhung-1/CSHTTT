@@ -1,5 +1,5 @@
 app_name = "social_welfare"
-app_title = "Social Welfare"
+app_title = "An sinh xã hội phường"
 app_publisher = "Student Project"
 app_description = "Ward-level social welfare management system"
 app_email = "hahanh29911301@gmail.com"
@@ -35,8 +35,12 @@ add_to_apps_screen = [
 # ------------------
 
 # include js, css files in header of desk.html
-app_include_css = "/assets/social_welfare/css/ward_session.css"
-app_include_js = "/assets/social_welfare/js/ward_session.js"
+app_include_css = "/assets/social_welfare/css/ward_session.css?v=20261109-p3"
+app_include_js = [
+	"/assets/social_welfare/js/ward_session.js",
+	"/assets/social_welfare/js/ward_targets.js?v=20261109-p3",
+	"/assets/social_welfare/js/ward_ui.js?v=20261109-p3",
+]
 
 # include js, css files in header of web template
 web_include_css = "/assets/social_welfare/css/ward_login.css"
@@ -331,6 +335,10 @@ fixtures = [
 		"filters": [["workflow_name", "=", "Support Application Workflow"]],
 		"prefix": "zz_support_application",
 	},
+	{
+		"dt": "Target Group",
+		"filters": [["group_code", "in", ["MERITORIOUS_PERSON", "MERITORIOUS_RELATIVE", "SOCIAL_PROTECTION", "DISABILITY", "CHILDREN"]]],
+	},
 ]
 
 after_migrate = "social_welfare.migrations.after_migrate"
@@ -343,12 +351,15 @@ permission_query_conditions = {
 	"Citizen": "social_welfare.permissions.citizen_query",
 	"Household Classification": "social_welfare.permissions.classification_query",
 	"Support Application": "social_welfare.permissions.application_query",
+	"Target Group Assignment": "social_welfare.permissions.target_group_assignment_query",
+	"Eligibility Result": "social_welfare.permissions.eligibility_result_query",
+	"Verification Case": "social_welfare.permissions.verification_case_query",
 }
 has_permission = {
 	name: "social_welfare.permissions.document_permission"
-	for name in ("Household", "Citizen", "Household Classification", "Support Program", "Support Application")
+	for name in ("Household", "Citizen", "Household Classification", "Support Program", "Support Application", "Target Group Assignment", "Eligibility Result", "Verification Case")
 }
 doc_events = {
 	name: {"on_trash": "social_welfare.permissions.prevent_delete"}
-	for name in ("Household", "Citizen", "Support Program", "Support Application")
+	for name in ("Household", "Citizen", "Support Program", "Support Application", "Target Group", "Policy")
 }

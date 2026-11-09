@@ -11,25 +11,29 @@ frappe.ui.form.on("Household", {
 	},
 	refresh(frm) {
 		frm.toggle_display("head_citizen", !frm.is_new());
+		window.wardTargets?.render(frm, "Household");
 		if (frm.is_new()) {
+			wardUI.mountActions(frm, []);
 			frm.set_intro("Bước 1/2: Nhập họ tên chủ hộ và lưu hồ sơ hộ. Chưa cần tạo hay chọn Công dân làm chủ hộ. Sau khi lưu, hãy chọn Thêm công dân vào hộ.", "blue");
 			frm.fields_dict.classification_history.$wrapper.html('<p class="text-muted">Lưu hồ sơ hộ trước khi thêm lịch sử phân loại.</p>');
 			return;
 		}
 		frm.set_intro("Bước 2/2: Thêm công dân vào hộ. Nếu là chủ hộ, chọn quan hệ Chủ hộ; hệ thống sẽ liên kết công dân đó với hồ sơ hộ.", "blue");
+		const actions = [];
 		if (frappe.model.can_create("Citizen")) {
-			frm.add_custom_button("Thêm công dân vào hộ", () => frappe.new_doc("Citizen", {
+			actions.push({label: "Thêm công dân vào hộ", kind: "primary", onClick: () => frappe.new_doc("Citizen", {
 				household: frm.doc.name,
 				...(Number(frm.doc.member_count) === 0 ? { full_name: frm.doc.head_name, relationship: "Head" } : {}),
-			}));
+			})});
 		}
+		if (frappe.model.can_create("Household Classification")) {
+			actions.push({label: "Thêm kỳ phân loại", kind: "secondary", onClick: () => frappe.new_doc("Household Classification", { household: frm.doc.name })});
+		}
+		wardUI.mountActions(frm, actions, "Bổ sung thành viên và lịch sử phân loại cho hộ này.");
 		if (!frappe.model.can_read("Household Classification")) {
 			frm.toggle_display("classification_section", false);
 			frm.toggle_display("classification_history", false);
 			return;
-		}
-		if (frappe.model.can_create("Household Classification")) {
-			frm.add_custom_button("Thêm kỳ phân loại", () => frappe.new_doc("Household Classification", { household: frm.doc.name }));
 		}
 		frappe.call({ method: "social_welfare.api.household_history", args: { household: frm.doc.name } }).then(({ message: data }) => {
 			const e = frappe.utils.escape_html;
