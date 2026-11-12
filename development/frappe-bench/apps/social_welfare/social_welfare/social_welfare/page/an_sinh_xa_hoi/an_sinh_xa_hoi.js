@@ -50,6 +50,8 @@ frappe.pages["an-sinh-xa-hoi"].on_page_load = function (wrapper) {
     };
 };
 frappe.pages["an-sinh-xa-hoi"].on_page_show = wrapper => {
-    frappe.app.sidebar?.show_sidebar_for_module("Social Welfare");
+    if (typeof frappe.app.sidebar?.show_sidebar_for_module === "function") {
+        frappe.app.sidebar.show_sidebar_for_module("Social Welfare");
+    }
     wrapper.load_ward_dashboard?.();
 };
