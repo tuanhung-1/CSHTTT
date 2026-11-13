@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f5f1">
+    <title>Thư viện hỏi đáp · Document RAG</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Thư viện tài liệu">
+        <div class="brand"><span class="brand-mark" aria-hidden="true">✳</span><span>Document RAG<small>TRỢ LÝ TÀI LIỆU</small></span></div>
+        <div class="side-heading"><span>THƯ VIỆN</span><span id="doc-count" class="counter">0</span></div>
+        <label class="upload-box" id="drop-zone" for="file-input">
+          <input id="file-input" type="file" accept=".pdf,.docx,.txt,.md" multiple hidden>
+          <span class="upload-icon" aria-hidden="true">↑</span>
+          <strong>Thêm tài liệu</strong>
+          <span>Kéo thả hoặc bấm để chọn</span>
+          <small>PDF, Word, TXT, Markdown · tối đa 12 MB/tệp</small>
+        </label>
+        <div id="upload-message" class="upload-message" role="status" aria-live="polite"></div>
+        <div id="document-list" class="document-list" aria-live="polite"></div>
+        <div class="sidebar-bottom">
+          <div class="privacy-note"><span aria-hidden="true">◌</span><span>File gốc lưu trên máy; các đoạn văn bản và câu hỏi được gửi đến Gemini API để xử lý.</span></div>
+          <a href="https://ai.google.dev/gemini-api/docs/api-key" target="_blank" rel="noopener noreferrer">Cách tạo Gemini API key ↗</a>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div class="topbar-title"><span class="eyebrow">KHÔNG GIAN LÀM VIỆC</span><h1>Hỏi đáp tài liệu</h1></div>
+          <div id="model-status" class="model-pill" role="status"><span class="status-dot"></span><span>Đang kiểm tra Gemini…</span></div>
+        </header>
+        <div id="setup-banner" class="setup-banner" hidden></div>
+        <section id="conversation" class="conversation" aria-label="Cuộc trò chuyện" aria-live="polite">
+          <div id="welcome" class="welcome">
+            <div class="welcome-symbol" aria-hidden="true">✳</div>
+            <span class="eyebrow">CHÀO MỪNG</span>
+            <h2>Biến tài liệu thành<br><em>câu trả lời rõ ràng.</em></h2>
+            <p>Tải tài liệu lên, đặt câu hỏi bằng tiếng Việt và xem chính xác đoạn nguồn được dùng trong câu trả lời.</p>
+            <div class="suggestions" aria-label="Câu hỏi gợi ý">
+              <button type="button" class="suggestion" data-question="Tài liệu này nói về những nội dung chính nào?">Tóm tắt nội dung chính <span>↗</span></button>
+              <button type="button" class="suggestion" data-question="Những điều kiện hoặc yêu cầu nào được nêu trong tài liệu?">Tìm điều kiện và yêu cầu <span>↗</span></button>
+              <button type="button" class="suggestion" data-question="Quy trình thực hiện gồm những bước nào?">Xem các bước thực hiện <span>↗</span></button>
+            </div>
+          </div>
+        </section>
+        <div class="composer-wrap">
+          <form id="chat-form" class="composer">
+            <label for="question" class="sr-only">Nhập câu hỏi</label>
+            <textarea id="question" rows="1" maxlength="2000" placeholder="Hỏi điều gì đó về tài liệu của bạn…" required></textarea>
+            <button id="send-button" class="send-button" type="submit" aria-label="Gửi câu hỏi" title="Gửi câu hỏi">➜</button>
+          </form>
+          <div class="composer-footer"><span>Enter để gửi · Shift + Enter để xuống dòng</span><span>Kiểm tra nguồn trước khi sử dụng câu trả lời</span></div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
